@@ -10,6 +10,9 @@ const app = express();
 // Enable CORS access to this server
 app.use(cors());
 
+// Enable reading JSON request bodies
+app.use(express.json());
+
 app.get("/", async (req, res) => {
   const sightings = await Sighting.findAll();
   res.json(sightings);
@@ -18,6 +21,15 @@ app.get("/", async (req, res) => {
 app.get("/:sightingId", async (req, res) => {
   const sighting = await Sighting.findByPk(req.params.sightingId);
   res.json(sighting);
+});
+
+app.post("/", async (req, res) => {
+  const newSighting = await Sighting.create({
+    date: new Date(req.body.date),
+    location: req.body.location,
+    notes: req.body.notes,
+  });
+  res.json(newSighting);
 });
 
 app.listen(PORT, () => {
