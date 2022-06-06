@@ -14,13 +14,13 @@ app.use(cors());
 app.use(express.json());
 
 // Retrieve all sightings
-app.get("/", async (req, res) => {
+app.get("/sightings", async (req, res) => {
   const sightings = await Sighting.findAll();
   res.json(sightings);
 });
 
 // Create sighting
-app.post("/", async (req, res) => {
+app.post("/sightings", async (req, res) => {
   const newSighting = await Sighting.create({
     date: new Date(req.body.date),
     location: req.body.location,
@@ -30,7 +30,7 @@ app.post("/", async (req, res) => {
 });
 
 // Retrieve specific sighting
-app.get("/:sightingId", async (req, res) => {
+app.get("/sightings/:sightingId", async (req, res) => {
   const sighting = await Sighting.findByPk(req.params.sightingId);
   res.json(sighting);
 });
