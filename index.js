@@ -13,17 +13,17 @@ app.use(cors());
 // Enable reading JSON request bodies
 app.use(express.json());
 
-app.get("/", async (req, res) => {
+app.get("/sightings", async (req, res) => {
   const sightings = await Sighting.findAll();
   res.json(sightings);
 });
 
-app.get("/:sightingId", async (req, res) => {
+app.get("/sightings/:sightingId", async (req, res) => {
   const sighting = await Sighting.findByPk(req.params.sightingId);
   res.json(sighting);
 });
 
-app.post("/", async (req, res) => {
+app.post("/sightings", async (req, res) => {
   const newSighting = await Sighting.create({
     date: new Date(req.body.date),
     location: req.body.location,
