@@ -4,7 +4,7 @@ import express from "express";
 import db from "./db/models/index.cjs";
 const { Category, Comment, Sighting } = db;
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const app = express();
 
 // Enable CORS access to this server
