@@ -10,12 +10,12 @@ const app = express();
 // Enable CORS access to this server
 app.use(cors());
 
-app.get("/", async (req, res) => {
+app.get("/sightings", async (req, res) => {
   const sightings = await Sighting.findAll();
   res.json(sightings);
 });
 
-app.get("/:sightingId", async (req, res) => {
+app.get("/sightings/:sightingId", async (req, res) => {
   const sighting = await Sighting.findByPk(req.params.sightingId);
   res.json(sighting);
 });
