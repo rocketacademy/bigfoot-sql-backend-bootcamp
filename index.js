@@ -36,7 +36,7 @@ app.get("/sightings/:sightingId", async (req, res) => {
 });
 
 // Retrieve all comments for specific sighting
-app.get("/:sightingId/comments", async (req, res) => {
+app.get("/sightings/:sightingId/comments", async (req, res) => {
   const comments = await Comment.findAll({
     where: {
       SightingId: req.params.sightingId,
@@ -46,7 +46,7 @@ app.get("/:sightingId/comments", async (req, res) => {
 });
 
 // Create comment for specific sighting
-app.post("/:sightingId/comment", async (req, res) => {
+app.post("/sightings/:sightingId/comments", async (req, res) => {
   const newComment = await Comment.create({
     content: req.body.content,
     SightingId: req.params.sightingId,
