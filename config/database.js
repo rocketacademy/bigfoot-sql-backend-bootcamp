@@ -1,4 +1,6 @@
-{
+require('dotenv').config()
+
+module.exports = {
   "development": {
     "username": "kai",
     "password": null,
