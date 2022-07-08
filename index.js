@@ -1,8 +1,9 @@
-import cors from "cors";
-import express from "express";
+const cors = require('cors')
+const express = require('express')
+require('dotenv').config()
 
-import db from "./db/models/index.cjs";
-const { Sighting } = db;
+const db = require('./db/models/index')
+const { sighting } = db;
 
 const PORT = 3000;
 const app = express();
@@ -14,20 +15,22 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/sightings", async (req, res) => {
-  const sightings = await Sighting.findAll();
+  const sightings = await sighting.findAll();
   res.json(sightings);
 });
 
 app.get("/sightings/:sightingId", async (req, res) => {
-  const sighting = await Sighting.findByPk(req.params.sightingId);
+  const { sightingId } = req.params
+  const sighting = await sighting.findByPk(sightingId);
   res.json(sighting);
 });
 
 app.post("/sightings", async (req, res) => {
-  const newSighting = await Sighting.create({
-    date: new Date(req.body.date),
-    location: req.body.location,
-    notes: req.body.notes,
+  const { date, location, notes } = req.body
+  const newSighting = await sighting.create({
+    date: new Date(date),
+    location: location,
+    notes: notes,
   });
   res.json(newSighting);
 });
