@@ -1,7 +1,6 @@
 {
   "name": "bigfoot-sql-backend-bootcamp",
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
     "start": "nodemon index.js"
   },
