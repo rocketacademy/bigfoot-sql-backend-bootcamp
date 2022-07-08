@@ -1,10 +1,11 @@
-import cors from "cors";
-import express from "express";
+const cors = require('cors')
+const express = require('express')
+require('dotenv').config()
 
-import db from "./db/models/index.cjs";
-const { Comment, Sighting } = db;
+const db = require('./db/models/index')
+const { Comment, sighting } = db;
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 const app = express();
 
 // Enable CORS access to this server
@@ -15,31 +16,34 @@ app.use(express.json());
 
 // Retrieve all sightings
 app.get("/sightings", async (req, res) => {
-  const sightings = await Sighting.findAll();
+  const sightings = await sighting.findAll();
   res.json(sightings);
 });
 
 // Create sighting
 app.post("/sightings", async (req, res) => {
-  const newSighting = await Sighting.create({
-    date: new Date(req.body.date),
-    location: req.body.location,
-    notes: req.body.notes,
+  const { date, location, notes } = req.body
+  const newSighting = await sighting.create({
+    date: new Date(date),
+    location: location,
+    notes: notes,
   });
   res.json(newSighting);
 });
 
 // Retrieve specific sighting
 app.get("/sightings/:sightingId", async (req, res) => {
-  const sighting = await Sighting.findByPk(req.params.sightingId);
+  const { sightingId } = req.params
+  const sighting = await sighting.findByPk(sightingId);
   res.json(sighting);
 });
 
 // Retrieve all comments for specific sighting
 app.get("/sightings/:sightingId/comments", async (req, res) => {
+  const { sightingId } = req.params
   const comments = await Comment.findAll({
     where: {
-      SightingId: req.params.sightingId,
+      SightingId: sightingId,
     },
   });
   res.json(comments);
@@ -47,9 +51,11 @@ app.get("/sightings/:sightingId/comments", async (req, res) => {
 
 // Create comment for specific sighting
 app.post("/sightings/:sightingId/comments", async (req, res) => {
+  const { content } = req.body
+  const { sightingId } = req.params
   const newComment = await Comment.create({
-    content: req.body.content,
-    SightingId: req.params.sightingId,
+    content: content,
+    SightingId: sightingId,
   });
   res.json(newComment);
 });
