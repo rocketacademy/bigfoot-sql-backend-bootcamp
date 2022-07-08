@@ -1,10 +1,11 @@
-import cors from "cors";
-import express from "express";
+const cors = require('cors')
+const express = require('express')
+require('dotenv').config()
 
-import db from "./db/models/index.cjs";
+const db = require('./db/models/index.js')
 const { Sighting } = db;
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 const app = express();
 
 // Enable CORS access to this server
@@ -16,7 +17,8 @@ app.get("/sightings", async (req, res) => {
 });
 
 app.get("/sightings/:sightingId", async (req, res) => {
-  const sighting = await Sighting.findByPk(req.params.sightingId);
+  const { sightingId } = req.params
+  const sighting = await Sighting.findByPk(sightingId);
   res.json(sighting);
 });
 
