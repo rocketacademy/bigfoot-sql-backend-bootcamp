@@ -1,7 +1,8 @@
 import cors from "cors";
 import express from "express";
+require('dotnev').config()
 
-import db from "./db/models/index.cjs";
+import db from "./db/models/index.js";
 const { Category, Comment, Sighting } = db;
 
 const PORT = process.env.PORT || 3000;
