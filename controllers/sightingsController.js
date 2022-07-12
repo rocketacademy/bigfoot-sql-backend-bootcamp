@@ -1,12 +1,14 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, categoryModel) {
+  constructor(model, categoryModel, commentModel) {
     super(model);
     this.categoryModel = categoryModel;
+    this.commentModel = commentModel;
   }
 
   /** if a method in this extended class AND the base class has the same name, the one in the extended class will run over the base method */
+  // Create sighting
   async insertOne(req, res) {
     const { date, location, notes, selectedCategoryIds } = req.body;
     try {
@@ -31,6 +33,7 @@ class SightingsController extends BaseController {
     }
   }
 
+  // Retrieve specific sighting
   async getOne(req, res) {
     const { sightingId } = req.params;
     try {
@@ -38,6 +41,36 @@ class SightingsController extends BaseController {
         include: this.categoryModel,
       });
       return res.json(sighting);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  // Retrieve all comments for specific sighting
+  async getComments(req, res) {
+    const { sightingId } = req.params;
+    try {
+      const comments = await this.commentModel.findAll({
+        where: {
+          SightingId: sightingId,
+        },
+      });
+      return res.json(comments);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  // Create comment for specific sighting
+  async insertOneComment(req, res) {
+    const { sightingId } = req.params;
+    const { content } = req.body;
+    try {
+      const newComment = await this.commentModel.create({
+        content: content,
+        SightingId: sightingId,
+      });
+      return res.json(newComment);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }

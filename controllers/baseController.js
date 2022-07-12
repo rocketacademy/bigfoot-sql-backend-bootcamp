@@ -17,8 +17,8 @@ class BaseController {
 
   async insertOne(req, res) {
     try {
-      const data = req.body;
-      const output = await this.model.create({ ...data });
+      const data = {...req.body};
+      const output = await this.model.create(data);
       return res.json(output);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });

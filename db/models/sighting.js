@@ -17,11 +17,21 @@ module.exports = (sequelize, DataTypes) => {
       date: DataTypes.DATE,
       location: DataTypes.STRING,
       notes: DataTypes.TEXT,
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date()
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date()
+      },
     },
     {
       sequelize,
       modelName: "sighting",
-      underscoreed: true
+      underscored: true
     }
   );
   return Sighting;

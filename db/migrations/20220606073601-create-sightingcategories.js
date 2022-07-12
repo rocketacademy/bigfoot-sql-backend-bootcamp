@@ -9,25 +9,26 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      SightingId: {
+      sighting_id: {
         type: Sequelize.INTEGER,
         references: {
           model: "sightings",
           key: "id",
         },
       },
-      CategoryId: {
+      category_id: {
         type: Sequelize.INTEGER,
         references: {
           model: "categories",
           key: "id",
         },
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
+
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },

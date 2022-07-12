@@ -14,11 +14,21 @@ module.exports = (sequelize, DataTypes) => {
   category.init(
     {
       name: DataTypes.STRING,
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date()
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date()
+      },
     },
     {
       sequelize,
       modelName: "category",
-      underscoreed: true
+      underscored: true
     }
   );
   return category;

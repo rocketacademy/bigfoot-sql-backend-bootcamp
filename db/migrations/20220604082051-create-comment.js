@@ -11,18 +11,18 @@ module.exports = {
       content: {
         type: Sequelize.STRING,
       },
-      SightingId: {
+      sighting_id: {
         type: Sequelize.INTEGER,
         references: {
           model: "sightings",
           key: "id",
         },
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
