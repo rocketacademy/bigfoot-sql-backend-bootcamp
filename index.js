@@ -2,8 +2,24 @@ const cors = require('cors')
 const express = require('express')
 require('dotenv').config()
 
+
+
+// importing Routers
+const SightingsRouter = require('./routers/sightingsRouter')
+
+// importing Controllers
+const SightingsController = require('./controllers/sightingsController')
+
+// importing DB
 const db = require('./db/models/index')
-const { Comment, sighting } = db;
+const { comment, sighting } = db;
+
+// initializing Controllers -> note the lowercase for the first word
+const sightingsController = new SightingsController(sighting, comment)
+
+// inittializing Routers
+const sightingRouter = new SightingsRouter(sightingsController).routes()
+
 
 const PORT = process.env.PORT;
 const app = express();
@@ -14,51 +30,8 @@ app.use(cors());
 // Enable reading JSON request bodies
 app.use(express.json());
 
-// Retrieve all sightings
-app.get("/sightings", async (req, res) => {
-  const sightings = await sighting.findAll();
-  res.json(sightings);
-});
-
-// Create sighting
-app.post("/sightings", async (req, res) => {
-  const { date, location, notes } = req.body
-  const newSighting = await sighting.create({
-    date: new Date(date),
-    location: location,
-    notes: notes,
-  });
-  res.json(newSighting);
-});
-
-// Retrieve specific sighting
-app.get("/sightings/:sightingId", async (req, res) => {
-  const { sightingId } = req.params
-  const sighting = await sighting.findByPk(sightingId);
-  res.json(sighting);
-});
-
-// Retrieve all comments for specific sighting
-app.get("/sightings/:sightingId/comments", async (req, res) => {
-  const { sightingId } = req.params
-  const comments = await Comment.findAll({
-    where: {
-      SightingId: sightingId,
-    },
-  });
-  res.json(comments);
-});
-
-// Create comment for specific sighting
-app.post("/sightings/:sightingId/comments", async (req, res) => {
-  const { content } = req.body
-  const { sightingId } = req.params
-  const newComment = await Comment.create({
-    content: content,
-    SightingId: sightingId,
-  });
-  res.json(newComment);
-});
+//user Router
+app.use('/sightings', sightingRouter)
 
 // Start server
 app.listen(PORT, () => {
