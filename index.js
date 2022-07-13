@@ -2,8 +2,24 @@ const cors = require('cors')
 const express = require('express')
 require('dotenv').config()
 
+
+
+// importing Routers
+const SightingsRouter = require('./routers/sightingsRouter')
+
+// importing Controllers
+const SightingsController = require('./controllers/sightingsController')
+
+// importing DB
 const db = require('./db/models/index')
-const { sighting } = db;
+const { comment, sighting } = db;
+
+// initializing Controllers -> note the lowercase for the first word
+const sightingsController = new SightingsController(sighting, comment)
+
+// inittializing Routers
+const sightingRouter = new SightingsRouter(sightingsController).routes()
+
 
 const PORT = 3000;
 const app = express();
@@ -14,26 +30,7 @@ app.use(cors());
 // Enable reading JSON request bodies
 app.use(express.json());
 
-app.get("/sightings", async (req, res) => {
-  const sightings = await sighting.findAll();
-  res.json(sightings);
-});
-
-app.get("/sightings/:sightingId", async (req, res) => {
-  const { sightingId } = req.params
-  const sighting = await sighting.findByPk(sightingId);
-  res.json(sighting);
-});
-
-app.post("/sightings", async (req, res) => {
-  const { date, location, notes } = req.body
-  const newSighting = await sighting.create({
-    date: new Date(date),
-    location: location,
-    notes: notes,
-  });
-  res.json(newSighting);
-});
+app.use('/sightings', sightingRouter)
 
 app.listen(PORT, () => {
   console.log(`Express app listening on port ${PORT}!`);
