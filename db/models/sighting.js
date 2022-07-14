@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasMany(models.Comment);
+      this.hasMany(models.comment);
     }
   }
   Sighting.init(
@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Sighting",
+      modelName: "sighting",
+      underscored: true
     }
   );
   return Sighting;
