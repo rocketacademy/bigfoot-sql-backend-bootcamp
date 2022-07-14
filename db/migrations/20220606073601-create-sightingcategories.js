@@ -2,38 +2,39 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("SightingCategories", {
+    await queryInterface.createTable("sighting_categories", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      SightingId: {
+      sighting_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "Sightings",
+          model: "sightings",
           key: "id",
         },
       },
-      CategoryId: {
+      category_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "Categories",
+          model: "categories",
           key: "id",
         },
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
+
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("SightingCategories");
+    await queryInterface.dropTable("sighting_categories");
   },
 };

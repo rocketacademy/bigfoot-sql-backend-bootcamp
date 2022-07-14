@@ -8,25 +8,36 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.Sighting);
+      this.belongsTo(models.sighting);
     }
   }
   Comment.init(
     {
       content: DataTypes.STRING,
-      SightingId: {
+      sightingId: {
         type: DataTypes.INTEGER,
         references: {
-          // Sequelize docs suggest this should be plural table name and not singular model name
+          // Sequelize docs suggest this should be plural table name and not singular model name
           // https://sequelize.org/api/v6/class/src/model.js~model#static-method-init
-          model: "Sightings",
+          model: "sightings",
           key: "id",
         },
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date()
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date()
       },
     },
     {
       sequelize,
-      modelName: "Comment",
+      modelName: "comment",
+      underscored: true,
     }
   );
   return Comment;

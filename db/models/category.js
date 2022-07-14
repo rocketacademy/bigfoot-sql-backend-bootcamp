@@ -8,16 +8,27 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsToMany(models.Sighting, { through: "SightingCategories" });
+      this.belongsToMany(models.sighting, { through: "sightingCategories" });
     }
   }
   category.init(
     {
       name: DataTypes.STRING,
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date()
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date()
+      },
     },
     {
       sequelize,
-      modelName: "Category",
+      modelName: "category",
+      underscored: true
     }
   );
   return category;
