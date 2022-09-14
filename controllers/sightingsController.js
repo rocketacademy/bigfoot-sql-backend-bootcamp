@@ -52,7 +52,7 @@ class SightingsController extends BaseController {
     try {
       const comments = await this.commentModel.findAll({
         where: {
-          SightingId: sightingId,
+          sightingId: sightingId,
         },
       });
       return res.json(comments);
@@ -68,7 +68,7 @@ class SightingsController extends BaseController {
     try {
       const newComment = await this.commentModel.create({
         content: content,
-        SightingId: sightingId,
+        sightingId: sightingId,
       });
       return res.json(newComment);
     } catch (err) {

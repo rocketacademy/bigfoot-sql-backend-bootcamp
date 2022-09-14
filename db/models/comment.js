@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   Comment.init(
     {
       content: DataTypes.STRING,
-      sightingId: {
+      SightingId: {
         type: DataTypes.INTEGER,
         references: {
           // Sequelize docs suggest this should be plural table name and not singular model name
@@ -26,12 +26,12 @@ module.exports = (sequelize, DataTypes) => {
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: new Date()
+        defaultValue: new Date(),
       },
       updatedAt: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: new Date()
+        defaultValue: new Date(),
       },
     },
     {
