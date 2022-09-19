@@ -7,6 +7,16 @@ class SightingsController extends BaseController {
     this.commentModel = commentModel;
   }
 
+  // add alter get all to retrieve categories as well?
+  async getAll(req, res) {
+    try {
+      const output = await this.model.findAll({ include: this.categoryModel });
+      return res.json(output);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
   /** if a method in this extended class AND the base class has the same name, the one in the extended class will run over the base method */
   // Create sighting
   async insertOne(req, res) {

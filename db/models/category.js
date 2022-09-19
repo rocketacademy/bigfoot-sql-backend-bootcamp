@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsToMany(models.sighting, { through: "sightingCategories" });
+      this.belongsToMany(models.sighting, { through: "sighting_categories" });
     }
   }
   category.init(
@@ -17,18 +17,18 @@ module.exports = (sequelize, DataTypes) => {
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: new Date()
+        defaultValue: new Date(),
       },
       updatedAt: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: new Date()
+        defaultValue: new Date(),
       },
     },
     {
       sequelize,
       modelName: "category",
-      underscored: true
+      underscored: true,
     }
   );
   return category;

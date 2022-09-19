@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.hasMany(models.comment);
-      this.belongsToMany(models.category, { through: "sightingCategories" });
+      this.belongsToMany(models.category, { through: "sighting_categories" });
     }
   }
   Sighting.init(
@@ -20,18 +20,18 @@ module.exports = (sequelize, DataTypes) => {
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: new Date()
+        defaultValue: new Date(),
       },
       updatedAt: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: new Date()
+        defaultValue: new Date(),
       },
     },
     {
       sequelize,
       modelName: "sighting",
-      underscored: true
+      underscored: true,
     }
   );
   return Sighting;
