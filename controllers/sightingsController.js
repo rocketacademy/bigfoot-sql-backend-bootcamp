@@ -22,6 +22,25 @@ class SightingsController extends BaseController {
     }
   }
 
+  // Edit sighting
+  async editOne(req, res) {
+    const { sightingId } = req.params;
+    const { date, location, notes } = req.body;
+    try {
+      const sighting = await this.model.findByPk(sightingId);
+      await sighting.update({
+        date: date,
+        location: location,
+        notes: notes,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
+      return res.json(sighting);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
   // Retrieve specific sighting
   async getOne(req, res) {
     const { sightingId } = req.params;
