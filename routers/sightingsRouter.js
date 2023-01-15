@@ -14,6 +14,14 @@ class SightingsRouter {
       "/:sightingId/edit",
       this.controller.editOne.bind(this.controller),
     );
+    router.get(
+      "/:sightingId/comments",
+      this.controller.getComments.bind(this.controller),
+    );
+    router.post(
+      "/:sightingId/comments",
+      this.controller.insertComments.bind(this.controller),
+    );
     return router;
   }
 }
