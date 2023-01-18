@@ -1,14 +1,15 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, commentModel) {
+  constructor(model, commentModel, categoryModel) {
     super(model);
     this.commentModel = commentModel;
+    this.categoryModel = categoryModel;
   }
 
   // Insert sighting
   async insertOne(req, res) {
-    const { date, location, notes } = req.body;
+    const { date, location, notes, selectedCategoryIds } = req.body;
     try {
       const newSighting = await this.model.create({
         date: date,
@@ -17,6 +18,12 @@ class SightingsController extends BaseController {
         created_at: new Date(),
         updated_at: new Date(),
       });
+      const selectedCategories = await this.categoryModel.findAll({
+        where: {
+          id: selectedCategoryIds,
+        },
+      });
+      await newSighting.setCategories(selectedCategories);
       return res.json(newSighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -26,17 +33,25 @@ class SightingsController extends BaseController {
   // Edit sighting
   async editOne(req, res) {
     const { sightingId } = req.params;
-    const { date, location, notes } = req.body;
+    const { date, location, notes, selectedCategoryIds } = req.body;
     try {
-      const sighting = await this.model.findByPk(sightingId);
-      await sighting.update({
+      const sighting = await this.model.findByPk(sightingId, {
+        include: this.categoryModel,
+      });
+      const updatedSighting = await sighting.update({
         date: date,
         location: location,
         notes: notes,
         created_at: new Date(),
         updated_at: new Date(),
       });
-      return res.json(sighting);
+      const selectedCategories = await this.categoryModel.findAll({
+        where: {
+          id: selectedCategoryIds,
+        },
+      });
+      await updatedSighting.setCategories(selectedCategories);
+      return res.json(updatedSighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
@@ -46,7 +61,9 @@ class SightingsController extends BaseController {
   async getOne(req, res) {
     const { sightingId } = req.params;
     try {
-      const sighting = await this.model.findByPk(sightingId);
+      const sighting = await this.model.findByPk(sightingId, {
+        include: this.categoryModel,
+      });
       return res.json(sighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
