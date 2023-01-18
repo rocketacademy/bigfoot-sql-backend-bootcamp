@@ -7,11 +7,6 @@ class CategoriesController extends BaseController {
     this.sightingModel = sightingModel;
   }
 
-  // // Get all categories associated to sighthing
-  // async getCategory(req, res) {
-  //   const { sightingId } = req.body;
-  // }
-
   // Add new category
   async addCategory(req, res) {
     const { name } = req.body;
