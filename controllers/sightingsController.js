@@ -20,7 +20,7 @@ class SightingsController extends BaseController {
 
   // Add new sighting
   async addOne(req, res) {
-    const {date, location, notes} = req.body;
+    const { date, location, notes } = req.body;
     try {
       const newSighting = await this.sightingModel.create({
         date: new Date(date),
@@ -29,45 +29,40 @@ class SightingsController extends BaseController {
       });
       return res.json(newSighting);
     } catch (err) {
-      return res.status(400).json({error: true, msg: err});
+      return res.status(400).json({ error: true, msg: err });
     }
   }
 
   //Retrieve all comments
   async getAllComments(req, res) {
-    const {sightingId} = req.params
-    console.log(sightingId)
+    const { sightingId } = req.params;
     try {
       const comments = await this.commentModel.findAll({
         where: {
-          sighting_id: sightingId
-        }
-      })
+          sighting_id: sightingId,
+        },
+      });
       return res.json(comments);
     } catch (err) {
-      return res.status(400).json({error: true, msg: err})
+      return res.status(400).json({ error: true, msg: err });
     }
   }
 
-
   //Add comment
   async addComment(req, res) {
-    const {sightingId} = req.params;
-    const {content} = req.body;
-    console.log(req.body)
-    console.log(sightingId)
+    const { sightingId } = req.params;
+    const { content } = req.body;
 
     try {
       const newComment = await this.commentModel.create({
         content: content,
-        sighting_id: sightingId
+        sighting_id: sightingId,
       });
-      return res.json(newComment)
+      return res.json(newComment);
     } catch (err) {
-      return res.status(400).json({error: true, msg: err})
+      return res.status(400).json({ error: true, msg: err });
     }
   }
-  
 }
 
 module.exports = SightingsController;
