@@ -6,6 +6,8 @@ module.exports = {
     await queryInterface.createTable("sighting_categories", {
       id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
+        type: Sequelize.INTEGER,
       },
       sighting_id: {
         type: Sequelize.INTEGER,
