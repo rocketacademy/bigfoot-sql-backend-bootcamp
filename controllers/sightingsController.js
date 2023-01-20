@@ -12,7 +12,14 @@ class SightingsController extends BaseController {
   async getOne(req, res) {
     const { sightingId } = req.params;
     try {
-      const sighting = await this.sightingModel.findByPk(sightingId);
+      const sighting = await this.sightingModel.findByPk(sightingId, {
+        include: [
+          {
+            model: this.categoryModel,
+            through: { attributes: [] },
+          },
+        ],
+      });
       return res.json(sighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -23,8 +30,6 @@ class SightingsController extends BaseController {
   async addOne(req, res) {
     const { date, location, notes, selectedCategoryIds } = req.body;
     try {
-      console.log(selectedCategoryIds);
-      console.log(this.categoryModel);
       const addedCategories = await this.categoryModel.findAll({
         where: { id: selectedCategoryIds },
       });
