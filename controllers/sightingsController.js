@@ -26,6 +26,8 @@ class SightingsController extends BaseController {
         date: new Date(date),
         location: location,
         notes: notes,
+        created_at: new Date(),
+        updated_at: new Date(),
       });
       return res.json(newSighting);
     } catch (err) {
