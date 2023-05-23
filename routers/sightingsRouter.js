@@ -7,9 +7,10 @@ class SightingsRouter {
   }
   routes() {
     // we will insert routes into here later on
-    router.get("/", this.controller.getAll.bind(this.controller));
+    router.get("/", this.controller.getAllWithFilter.bind(this.controller));
     router.post("/", this.controller.addOne.bind(this.controller));
     router.get("/:sightingId", this.controller.getOne.bind(this.controller));
+    router.put("/:sightingId", this.controller.updateOne.bind(this.controller));
     return router;
   }
 }

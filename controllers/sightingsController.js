@@ -30,6 +30,54 @@ class SightingsController extends BaseController {
       return res.status(400).json({ error: true, msg: err });
     }
   }
+
+  // Update existing sighting
+  async updateOne(req, res) {
+    const { date, location, notes } = req.body;
+    const { sightingId } = req.params;
+    try {
+      const update = await this.model.update(
+        {
+          date: date,
+          location: location,
+          notes: notes,
+        },
+        { where: { id: sightingId } }
+      );
+      console.log("Updates:", update);
+
+      const updatedSighting = await this.model.findByPk(sightingId);
+
+      return res.json(updatedSighting);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  // Get all sightings with filtering
+  async getAllWithFilter(req, res) {
+    try {
+      const { date, location, notes } = req.query;
+      const whereClause = {};
+
+      if (date) {
+        whereClause.date = date;
+      }
+
+      if (location) {
+        whereClause.location = location;
+      }
+
+      if (notes) {
+        whereClause.notes = notes;
+      }
+
+      const output = await this.model.findAll({ where: whereClause });
+      return res.json(output);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
 }
 
 module.exports = SightingsController;
