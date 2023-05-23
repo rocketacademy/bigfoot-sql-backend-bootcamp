@@ -15,29 +15,38 @@ class BaseController {
   }
 
   // TODO: Fix bug - works sometimes
-  async getAllWithFilter(req, res) {
-    try {
-      const { date, location, notes } = req.query;
-      const whereClause = {};
+  // async getAllWithFilter(req, res) {
+  //   try {
+  //     const { date, locationDescription, country, cityOrTown, notes } =
+  //       req.query;
+  //     const whereClause = {};
 
-      if (date) {
-        whereClause.date = date;
-      }
+  //     if (date) {
+  //       whereClause.date = date;
+  //     }
 
-      if (location) {
-        whereClause.location = location;
-      }
+  //     if (locationDescription) {
+  //       whereClause.locationDescription = locationDescription;
+  //     }
 
-      if (notes) {
-        whereClause.notes = notes;
-      }
+  //     if (country) {
+  //       whereClause.country = country;
+  //     }
 
-      const output = await this.model.findAll({ where: whereClause });
-      return res.json(output);
-    } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
-    }
-  }
+  //     if (cityOrTown) {
+  //       whereClause.cityOrTown = cityOrTown;
+  //     }
+
+  //     if (notes) {
+  //       whereClause.notes = notes;
+  //     }
+
+  //     const output = await this.model.findAll({ where: whereClause });
+  //     return res.json(output);
+  //   } catch (err) {
+  //     return res.status(400).json({ error: true, msg: err });
+  //   }
+  // }
 }
 
 module.exports = BaseController;

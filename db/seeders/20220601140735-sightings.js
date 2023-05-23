@@ -7,7 +7,7 @@ module.exports = {
       [
         {
           date: new Date(1990, 9),
-          locationDescription: "East side of Prince William Sound",
+          location_description: "East side of Prince William Sound",
           country: "USA",
           city_town: "Alaska",
           notes:
@@ -17,7 +17,7 @@ module.exports = {
         },
         {
           date: new Date(2000, 9, 2),
-          locationDescription: "Campgrounds at Allamuchy State Park",
+          location_description: "Campgrounds at Allamuchy State Park",
           country: "USA",
           city_town: "Warren County, New Jersey",
           notes:
@@ -27,7 +27,7 @@ module.exports = {
         },
         {
           date: new Date(2016, 6, 7),
-          locationDescription: "Route 120",
+          location_description: "Route 120",
           country: "USA",
           city_town: "Sullivan County, New Hampshire",
           notes:
