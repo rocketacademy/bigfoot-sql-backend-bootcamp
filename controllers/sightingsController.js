@@ -182,11 +182,9 @@ class SightingsController extends BaseController {
   // Add like to sighting
   async addLike(req, res) {
     const { sightingId } = req.params;
-    const { total } = req.body;
 
     try {
       const newLike = await this.like.create({
-        total: total,
         sightingId: sightingId,
       });
       return res.json(newLike);
