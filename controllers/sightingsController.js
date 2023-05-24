@@ -1,9 +1,10 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, comment) {
+  constructor(model, comment, like) {
     super(model);
     this.comment = comment;
+    this.like = like;
   }
 
   // Retrieve specific sighting
@@ -143,6 +144,52 @@ class SightingsController extends BaseController {
         },
       });
       return res.json(deletedComment);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  // Get all likes for sighting
+  async getAllLikes(req, res) {
+    const { sightingId } = req.params;
+
+    try {
+      const likes = await this.like.findAll({
+        where: {
+          sightingId: sightingId,
+        },
+      });
+      return res.json(likes);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  // Get likes count for sighting
+  async getLikesCount(req, res) {
+    const { sightingId } = req.params;
+
+    try {
+      const likesCount = await this.like.count({
+        where: { sightingId: sightingId },
+      });
+      return res.json({ count: likesCount });
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  // Add like to sighting
+  async addLike(req, res) {
+    const { sightingId } = req.params;
+    const { total } = req.body;
+
+    try {
+      const newLike = await this.like.create({
+        total: total,
+        sightingId: sightingId,
+      });
+      return res.json(newLike);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
