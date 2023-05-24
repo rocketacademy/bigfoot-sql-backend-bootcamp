@@ -1,31 +1,28 @@
 "use strict";
+
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("sightings", {
+    await queryInterface.createTable("comments", {
       id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
+      },
+      content: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      commentor: {
+        type: Sequelize.STRING,
+        defaultValue: "Anonymous",
+      },
+      sighting_id: {
         type: Sequelize.INTEGER,
-      },
-      month: {
-        type: Sequelize.STRING,
-        defaultValue: "Unknown",
-      },
-      year: {
-        type: Sequelize.INTEGER,
-        defaultValue: null,
-      },
-      location: {
-        type: Sequelize.STRING,
-        defaultValue: "Unknown",
-      },
-      season: {
-        type: Sequelize.STRING,
-        defaultValue: "Unknown",
-      },
-      notes: {
-        type: Sequelize.TEXT,
+        references: {
+          model: "sightings",
+          key: "id",
+        },
         allowNull: false,
       },
       created_at: {
@@ -38,7 +35,8 @@ module.exports = {
       },
     });
   },
+
   async down(queryInterface) {
-    await queryInterface.dropTable("sightings");
+    await queryInterface.dropTable("comments");
   },
 };

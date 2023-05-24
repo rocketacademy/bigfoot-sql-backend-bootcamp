@@ -6,9 +6,19 @@ class SightingsRouter {
     this.controller = controller;
   }
   routes() {
-    // we will insert routes into here later on
+    // by binding controllers here, we don't have to use arrow function in the controllers
+    // if we use an arrow function in routes, we don't have to bind, but we need arrow funcs in controllers
     router.get("/", this.controller.getAll.bind(this.controller));
-    router.get("/:sightingId", this.controller.getOne.bind(this.controller));
+    router.post("/", this.controller.insertOne.bind(this.controller));
+    router.get("/:id", this.controller.getOne.bind(this.controller));
+    router.get(
+      "/:id/comments",
+      this.controller.getComments.bind(this.controller)
+    );
+    router.post(
+      "/:id/comments",
+      this.controller.postComment.bind(this.controller)
+    );
     return router;
   }
 }
