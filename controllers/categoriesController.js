@@ -1,8 +1,9 @@
 const BaseController = require("./baseController");
 
 class CategoriesController extends BaseController {
-  constructor(model) {
+  constructor(model, category) {
     super(model);
+    this.model = category;
   }
 
   // Retrieve all categories

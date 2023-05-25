@@ -15,8 +15,13 @@ const db = require("./db/models/index");
 const { comment, sighting, like, category } = db;
 
 // initializing Controllers -> note the lowercase for the first word
-const sightingsController = new SightingsController(sighting, comment, like);
-const categoriesController = new CategoriesController(category);
+const sightingsController = new SightingsController(
+  sighting,
+  comment,
+  like,
+  category
+);
+const categoriesController = new CategoriesController(sighting, category);
 
 // inittializing Routers
 const sightingRouter = new SightingsRouter(sightingsController).routes();

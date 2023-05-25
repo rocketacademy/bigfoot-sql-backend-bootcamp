@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsToMany(models.sighting, { through: "SightingCategories" });
+      this.belongsToMany(models.sighting, { through: "sighting_categories" });
     }
   }
   Category.init(
