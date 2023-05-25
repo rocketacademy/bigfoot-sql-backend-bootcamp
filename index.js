@@ -12,14 +12,15 @@ const CategoriesController = require("./controllers/categoriesController");
 
 // importing DB
 const db = require("./db/models/index");
-const { comment, sighting, like, category } = db;
+const { comment, sighting, like, category, sightingcategory } = db;
 
 // initializing Controllers -> note the lowercase for the first word
 const sightingsController = new SightingsController(
   sighting,
   comment,
   like,
-  category
+  category,
+  sightingcategory
 );
 const categoriesController = new CategoriesController(sighting, category);
 
