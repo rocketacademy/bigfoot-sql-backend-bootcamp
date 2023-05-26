@@ -7,15 +7,7 @@ class BaseController {
 
   async getAll(req, res) {
     try {
-      let { filter } = req.query;
-      let output;
-      if (filter === "All" || !filter) {
-        output = await this.model.findAll();
-      } else {
-        output = await this.model.findAll({
-          where: { season: filter },
-        });
-      }
+      const output = await this.model.findAll();
       return res.json(output);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });

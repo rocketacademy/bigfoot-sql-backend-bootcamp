@@ -1,16 +1,52 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, comments) {
+  constructor(model, { comments, categories }) {
     super(model);
     this.comments = comments;
+    this.categories = categories;
+  }
+
+  async getFiltered(req, res) {
+    try {
+      let { filter } = req.query;
+      let output;
+      if (filter === "All" || !filter) {
+        output = await this.model.findAll();
+      } else {
+        output = await this.model.findAll({
+          where: { season: filter },
+        });
+      }
+      const summarisedData = [];
+      output.map((sighting) => {
+        const sightingData = {
+          id: sighting.id,
+          location: sighting.location,
+          month: sighting.month,
+          year: sighting.year,
+          season: sighting.season,
+        };
+        summarisedData.push(sightingData);
+      });
+      return res.json(summarisedData);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
   }
 
   // Retrieve specific sighting
   async getOne(req, res) {
     const { id } = req.params;
     try {
-      const sighting = await this.model.findByPk(id);
+      const sighting = await this.model.findOne({
+        where: { id: id },
+        include: { model: this.categories },
+      });
+      // const categories = await this.sightingsCategories.findAll({
+      //   where: { sightingId: id },
+      // });
+      // console.log(categories);
       return res.json(sighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
