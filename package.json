@@ -6,13 +6,13 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^16.0.1",
+    "dotenv": "^16.0.3",
     "express": "^4.18.1",
-    "pg": "^8.7.3",
-    "sequelize": "^6.20.1"
+    "pg": "^8.11.0",
+    "sequelize": "^6.31.1"
   },
   "devDependencies": {
     "eslint": "^8.16.0",
-    "sequelize-cli": "^6.4.1"
+    "sequelize-cli": "^6.6.0"
   }
 }
