@@ -13,7 +13,10 @@ const db = require("./db/models/index");
 const { comment, sighting } = db;
 
 // initializing Controllers -> note the lowercase for the first word
-const sightingsController = new SightingsController(sighting, comment);
+const sightingsController = new SightingsController({
+  model: sighting,
+  comment,
+});
 
 // inittializing Routers
 const sightingRouter = new SightingsRouter(sightingsController).routes();
@@ -31,5 +34,5 @@ app.use(express.json());
 app.use("/sightings", sightingRouter);
 
 app.listen(PORT, () => {
-    console.log(`Express app listening on port ${PORT}!`);
+  console.log(`Express app listening on port ${PORT}!`);
 });

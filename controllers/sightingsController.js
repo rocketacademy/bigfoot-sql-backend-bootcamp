@@ -2,8 +2,9 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model) {
+  constructor({ model, comment }) {
     super(model);
+    this.comment = comment;
   }
 
   // Retrieve specific sighting
@@ -21,30 +22,45 @@ class SightingsController extends BaseController {
     let date = req.body.date;
     let location = req.body.location;
     let notes = req.body.notes;
-    let created_at = new Date();
-    let updated_at = new Date();
 
     try {
       const newSighting = await this.model.create({
         date,
         location,
         notes,
-        created_at,
-        updated_at,
       });
 
-      res.json({
+      return res.json({
         success: true,
-        id: newSighting.id,
-        date,
-        location,
-        notes,
-        created_at,
-        updated_at,
+        sighting: newSighting,
       });
     } catch (err) {
-      res.status(400).json({ success: false, msg: err });
+      return res.status(400).json({ success: false, msg: err });
     }
+  };
+
+  getAllComments = async (req, res) => {
+    const { sightingId } = req.params;
+
+    const sighting = await this.model.findOne({
+      where: { id: sightingId },
+    });
+
+    const comments = await sighting.getComments();
+
+    return res.json({ success: true, data: comments });
+  };
+
+  addNewComment = async (req, res) => {
+    const { sightingId } = req.params;
+    let content = req.body.content;
+
+    const newComment = await this.comment.create({
+      content,
+      sightingId,
+    });
+
+    return res.json({ success: true, data: newComment });
   };
 }
 

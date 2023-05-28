@@ -10,6 +10,15 @@ class SightingsRouter {
     router.get("/", this.controller.getAll.bind(this.controller));
     router.post("/", this.controller.addNewSighting.bind(this.controller));
     router.get("/:sightingId", this.controller.getOne.bind(this.controller));
+
+    router.get(
+      "/:sightingId/comments",
+      this.controller.getAllComments.bind(this.controller)
+    );
+    router.post(
+      "/:sightingId/comments",
+      this.controller.addNewComment.bind(this.controller)
+    );
     return router;
   }
 }
