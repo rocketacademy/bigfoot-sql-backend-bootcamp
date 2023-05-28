@@ -51,6 +51,19 @@ class SightingsController extends BaseController {
   }
 
   // Get all comments
+  async getComments(req, res) {
+    const { sightingId } = req.params;
+    try {
+      const comments = await this.comment.findAll({
+        where: {
+          sightingId: sightingId,
+        },
+      });
+      return res.json(comments);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
 }
 
 module.exports = SightingsController;
