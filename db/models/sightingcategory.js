@@ -18,14 +18,14 @@ module.exports = (sequelize, DataTypes) => {
       sightingId: {
         type: DataTypes.INTEGER,
         references: {
-          model: "sighting",
+          model: "sightings",
           key: "id",
         },
       },
       categoryId: {
         type: DataTypes.INTEGER,
         references: {
-          model: "category",
+          model: "categories",
           key: "id",
         },
       },
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "sightingcategory",
+      modelName: "sightingCategory",
       tableName: "sighting_categories",
       underscored: true,
     }

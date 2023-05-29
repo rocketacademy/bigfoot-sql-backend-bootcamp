@@ -1,11 +1,12 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, comment, like, category) {
+  constructor(model, comment, like, category, sightingCategory) {
     super(model);
     this.comment = comment;
     this.like = like;
     this.category = category;
+    this.sightingCategory = sightingCategory;
   }
 
   // Retrieve specific sighting
@@ -13,7 +14,11 @@ class SightingsController extends BaseController {
     const { sightingId } = req.params;
     try {
       const sighting = await this.model.findByPk(sightingId, {
-        include: this.category,
+        include: {
+          model: this.category,
+          attributes: ["id", "name"],
+          through: { attributes: ["intensity"] },
+        },
       });
       return res.json(sighting);
     } catch (err) {
@@ -23,8 +28,15 @@ class SightingsController extends BaseController {
 
   // Post new sighting
   async addOne(req, res) {
-    const { date, locationDescription, country, cityTown, notes, categoryIds } =
-      req.body;
+    const {
+      date,
+      locationDescription,
+      country,
+      cityTown,
+      notes,
+      categoryIds,
+      intensity,
+    } = req.body;
     try {
       // Create new sighting
       const newSighting = await this.model.create({
@@ -34,12 +46,21 @@ class SightingsController extends BaseController {
         cityTown: cityTown,
         notes: notes,
       });
+
       // Retrieve selected categories
       const selectedCategories = await this.category.findAll({
         where: { id: categoryIds },
       });
+
       // Associate new sighting with selected categories
       await newSighting.setCategories(selectedCategories);
+
+      // Set intensity level
+      const sightingCategory = await this.category.findByPk(categoryIds[0]);
+      await newSighting.addCategory(sightingCategory, {
+        through: { intensity: intensity },
+      });
+
       return res.json(newSighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -48,25 +69,60 @@ class SightingsController extends BaseController {
 
   // Update existing sighting
   async updateOne(req, res) {
-    const { date, locationDescription, country, cityOrTown, notes } = req.body;
+    const { date, locationDescription, country, cityTown, notes, categories } =
+      req.body;
     const { sightingId } = req.params;
+
     try {
       const update = await this.model.update(
         {
           date: date,
           locationDescription: locationDescription,
           country: country,
-          cityOrTown: cityOrTown,
+          cityTown: cityTown,
           notes: notes,
         },
         { where: { id: sightingId } }
       );
       console.log("Updates:", update);
 
-      const updatedSighting = await this.model.findByPk(sightingId);
+      // Update the categories and the intensity
+      // First, we fetch the sighting from the database
+      const sighting = await this.model.findByPk(sightingId);
+
+      // Clear existing categories of the sighting
+      await this.sightingCategory.destroy({
+        where: { sightingId: sightingId },
+      });
+
+      // Then add new categories with respective intensities
+      for (let { name, sighting_categories } of categories) {
+        const intensity = sighting_categories.intensity;
+
+        const category = await this.category.findOne({
+          where: { name: name },
+        });
+
+        if (category) {
+          await this.sightingCategory.create({
+            sightingId: sightingId,
+            categoryId: category.id,
+            intensity: intensity,
+          });
+        }
+      }
+
+      const updatedSighting = await this.model.findByPk(sightingId, {
+        include: {
+          model: this.category,
+          attributes: ["id", "name"],
+          through: { attributes: ["intensity"] },
+        },
+      });
 
       return res.json(updatedSighting);
     } catch (err) {
+      console.log(err);
       return res.status(400).json({ error: true, msg: err });
     }
   }
