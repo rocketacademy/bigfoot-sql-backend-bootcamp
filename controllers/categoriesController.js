@@ -20,20 +20,15 @@ class CategoriesController extends BaseController {
 
   // Submit category
   async createCategory(req, res) {
-    /*
-    const { date, location, notes } = req.body;
+    const { name } = req.body;
     try {
-      const newSighting = await this.sighting.create({
-        date: date,
-        location: location,
-        notes: notes,
+      const newCategory = await this.category.create({
+        name: name,
       });
-      return res.json(newSighting);
+      return res.json(newCategory);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
-    */
-    return res.status(200).json({ msg: "this route works" });
   }
   /*
   // Create comment
