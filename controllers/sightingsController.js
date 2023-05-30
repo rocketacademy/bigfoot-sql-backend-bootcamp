@@ -1,10 +1,21 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(sighting, comment) {
-    super(sighting, comment);
+  constructor(sighting, comment, category) {
+    super(sighting);
     this.sighting = sighting;
     this.comment = comment;
+    this.category = category;
+  }
+
+  // Get all Sightings and associated categories
+  async getAllSightingCategories(req, res) {
+    try {
+      const output = await this.model.findAll({ include: this.category });
+      return res.json(output);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
   }
 
   // Retrieve specific sighting
