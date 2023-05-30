@@ -1,9 +1,10 @@
 const BaseController = require("./baseController");
 
 class CategoriesController extends BaseController {
-  constructor(category) {
+  constructor(category, sighting) {
     super(category);
     this.category = category;
+    this.sighting = sighting;
   }
 
   /*
@@ -18,7 +19,7 @@ class CategoriesController extends BaseController {
     }
   }*/
 
-  // Submit category
+  // Create category
   async createCategory(req, res) {
     const { name } = req.body;
     try {
@@ -30,6 +31,25 @@ class CategoriesController extends BaseController {
       return res.status(400).json({ error: true, msg: err });
     }
   }
+
+  // Create relationship between sighting and category
+  // post to localhost:8000/categories/create
+  async createSightingCategory(req, res) {
+    const { sightingId, categories } = req.body;
+    try {
+      const targetSighting = await this.sighting.findOne({
+        where: { id: sightingId },
+      });
+      const targetCategories = categories.map((categoryData) => {
+        return categoryData.value;
+      });
+      targetSighting.addCategory(targetCategories);
+      return res.json({ targetCategories, targetSighting });
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
   /*
   // Create comment
   async createComment(req, res) {
