@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.comment, {
         foreignKey: "sighting_id",
       });
+      this.belongsToMany(models.category, {
+        through: models.sighting_category,
+      });
     }
   }
   Sighting.init(
