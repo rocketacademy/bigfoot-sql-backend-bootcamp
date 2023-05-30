@@ -1,28 +1,23 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("sightings", {
+    await queryInterface.createTable("comments", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      date: {
-        type: Sequelize.DATE,
-      },
-      location_description: {
+      content: {
         type: Sequelize.STRING,
       },
-      country: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      city_town: {
-        type: Sequelize.STRING,
-      },
-      notes: {
-        type: Sequelize.TEXT,
+      sighting_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          // Plural of model name
+          model: "sightings",
+          key: "id",
+        },
       },
       created_at: {
         allowNull: false,
@@ -35,6 +30,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("sightings");
+    await queryInterface.dropTable("comments");
   },
 };
