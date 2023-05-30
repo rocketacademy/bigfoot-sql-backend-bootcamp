@@ -5,7 +5,6 @@ class BaseController {
 
   /* All controllers that extend this BASE controller will have access to the below function **/
 
-
   async getAll(req, res) {
     try {
       const output = await this.model.findAll();
