@@ -1,28 +1,33 @@
+/* eslint-disable no-unused-vars */
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Sighting extends Model {
+  class Comment extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasMany(models.comment);
-      this.belongsToMany(models.category, { through: "sighting_categories" });
+      this.belongsTo(models.sighting);
     }
   }
-  Sighting.init(
+  Comment.init(
     {
-      date: DataTypes.DATE,
-      location: DataTypes.STRING,
-      notes: DataTypes.TEXT,
+      content: DataTypes.TEXT,
+      sightingId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "sighting",
+          key: "id",
+        },
+      },
     },
     {
       sequelize,
-      modelName: "sighting",
+      modelName: "comment",
       underscored: true,
     }
   );
-  return Sighting;
+  return Comment;
 };
