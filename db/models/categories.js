@@ -17,6 +17,16 @@ module.exports = (sequelize, DataTypes) => {
   Categories.init(
     {
       name: DataTypes.STRING,
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date(),
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date(),
+      },
     },
     {
       sequelize,
