@@ -14,6 +14,16 @@ class BaseController {
       return res.status(400).json({ error: true, msg: err });
     }
   }
+
+  async insertOne(req, res) {
+    try {
+      const data = { ...req.body };
+      const output = await this.model.create(data);
+      res.json(output);
+    } catch (err) {
+      res.status(400).json({ success: false, msg: err })
+    }
+  }
 }
 
 module.exports = BaseController;
