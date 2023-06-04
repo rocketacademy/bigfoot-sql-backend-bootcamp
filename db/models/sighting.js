@@ -7,8 +7,8 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate() {
-      // define association here
+    static associate(models) {
+      this.hasMany(models.comment);
     }
   }
   Sighting.init(
@@ -16,6 +16,16 @@ module.exports = (sequelize, DataTypes) => {
       date: DataTypes.DATE,
       location: DataTypes.STRING,
       notes: DataTypes.TEXT,
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date()
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: new Date()
+      }
     },
     {
       sequelize,

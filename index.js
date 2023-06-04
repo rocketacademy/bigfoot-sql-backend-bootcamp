@@ -3,6 +3,7 @@ const express = require('express')
 require('dotenv').config()
 
 
+
 // importing Routers
 const SightingsRouter = require('./routers/sightingsRouter')
 
@@ -22,6 +23,10 @@ const sightingRouter = new SightingsRouter(sightingsController).routes()
 
 const PORT = process.env.PORT;
 const app = express();
+
+//middleware added afte app but before routers
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 // Enable CORS access to this server
 app.use(cors());
