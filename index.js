@@ -26,6 +26,9 @@ const app = express();
 // Enable CORS access to this server
 app.use(cors());
 
+// Enable express to parse JSON bodies of income POST requests
+app.use(express.json());
+
 // using the routers
 app.use('/sightings', sightingRouter)
 
