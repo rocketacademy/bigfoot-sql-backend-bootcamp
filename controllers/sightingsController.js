@@ -18,7 +18,6 @@ class SightingsController extends BaseController {
 
   // Create a new sighting
   add = async (req, res) => {
-    console.log("add method is running");
     const { date, location, notes } = req.body;
     console.log(req.body);
     try {
