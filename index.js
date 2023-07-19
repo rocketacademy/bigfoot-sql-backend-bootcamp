@@ -15,7 +15,11 @@ const db = require("./db/models/index");
 const { comment, sighting, category } = db;
 
 // initializing Controllers -> note the lowercase for the first word
-const sightingsController = new SightingsController(sighting, comment);
+const sightingsController = new SightingsController(
+  sighting,
+  comment,
+  category
+);
 const categoriesController = new CategoriesController(category);
 
 // initializing Routers
@@ -25,8 +29,13 @@ const categoriesRouter = new CategoriesRouter(categoriesController).routes();
 const PORT = process.env.PORT;
 const app = express();
 
+const corsOptions = {
+  origin: process.env.FRONT_END,
+  optionsSuccessStatus: 200,
+};
+
 // Enable CORS access to this server
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Enable express to parse JSON bodies of income POST requests
 app.use(express.json());
