@@ -8,21 +8,29 @@ class BaseController {
 
   getAll = async (req, res) => {
     try {
-      if (req.query.year) {
-        console.log(typeof req.query.year);
-        const output = await this.model.findAll({
-          include: this.categoryModel,
-        });
-        const filteredOutput = output.filter((item) =>
-          item.date.toString().includes(req.query.year)
+      const { year, sort } = req.query;
+      const output = await this.model.findAll({
+        include: this.categoryModel,
+        order: [["id", "ASC"]],
+      });
+
+      let filteredOutput = output;
+
+      if (year) {
+        filteredOutput = output.filter((item) =>
+          item.date.toString().includes(year)
         );
-        return res.json(filteredOutput);
-      } else {
-        const output = await this.model.findAll({
-          include: this.categoryModel,
-        });
-        return res.json(output);
       }
+
+      if (sort === "asc") {
+        filteredOutput = filteredOutput.sort((a, b) => a.date - b.date);
+      }
+
+      if (sort === "desc") {
+        filteredOutput = filteredOutput.sort((a, b) => b.date - a.date);
+      }
+
+      return res.json(filteredOutput);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
