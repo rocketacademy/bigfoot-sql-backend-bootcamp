@@ -26,7 +26,7 @@ const categoriesController = new CategoriesController(category);
 const sightingRouter = new SightingsRouter(sightingsController).routes();
 const categoriesRouter = new CategoriesRouter(categoriesController).routes();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 const app = express();
 
 const corsOptions = {
@@ -35,10 +35,11 @@ const corsOptions = {
 };
 
 // Enable CORS access to this server
-app.use(cors(corsOptions));
+app.use(cors());
 
 // Enable express to parse JSON bodies of income POST requests
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // using the routers
 app.use("/sightings", sightingRouter);

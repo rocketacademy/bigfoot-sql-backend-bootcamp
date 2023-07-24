@@ -12,6 +12,8 @@ class SightingsRouter {
     router.get("/:sightingId/comments", this.controller.getAllComments);
     router.post("/", this.controller.add);
     router.post("/:sightingId/comments", this.controller.addComment);
+    router.put("/:sightingId", this.controller.editSighting);
+
     return router;
   };
 }

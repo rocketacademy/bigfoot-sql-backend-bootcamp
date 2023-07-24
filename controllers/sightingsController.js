@@ -75,6 +75,26 @@ class SightingsController extends BaseController {
       return res.status(400).json({ error: true, msg: err });
     }
   };
+
+  editSighting = async (req, res) => {
+    const { sightingId } = req.params;
+    const { date, location, notes } = req.body;
+    try {
+      const sightingToEdit = await this.model.findByPk(sightingId);
+      await sightingToEdit.update({
+        date,
+        location,
+        notes,
+      });
+      const output = await this.model.findAll({
+        include: this.categoryModel,
+        order: [["id", "ASC"]],
+      });
+      return res.json(output);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
 }
 
 module.exports = SightingsController;
