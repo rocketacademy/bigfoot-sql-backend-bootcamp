@@ -22,13 +22,16 @@ class SightingsController extends BaseController {
 
   // Create a new sighting
   add = async (req, res) => {
-    const { date, location, notes, categoryId } = req.body;
+    const { date, location_description, notes, categoryId, city, country } =
+      req.body;
     console.log(req.body);
     try {
       const newSighting = await this.model.create({
         date: date,
-        location: location,
+        location_description: location_description,
         notes: notes,
+        city: city,
+        country: country,
       });
       const selectedWeathers = await this.categoryModel.findAll({
         where: {
@@ -78,13 +81,15 @@ class SightingsController extends BaseController {
 
   editSighting = async (req, res) => {
     const { sightingId } = req.params;
-    const { date, location, notes } = req.body;
+    const { date, location_description, notes, city, country } = req.body;
     try {
       const sightingToEdit = await this.model.findByPk(sightingId);
       await sightingToEdit.update({
         date,
-        location,
+        location_description,
         notes,
+        city,
+        country,
       });
       const output = await this.model.findAll({
         include: this.categoryModel,
