@@ -13,7 +13,8 @@ class SightingsRouter {
     router.post("/", this.controller.add);
     router.post("/:sightingId/comments", this.controller.addComment);
     router.put("/:sightingId", this.controller.editSighting);
-
+    router.put("/:sightingId/comments/:commentId", this.controller.editComment);
+    router.delete("/:sightingId/comments/:commentId", this.controller.deleteComment);
     return router;
   };
 }

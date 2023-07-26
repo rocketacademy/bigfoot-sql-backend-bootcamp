@@ -18,7 +18,7 @@ class BaseController {
 
       if (year) {
         filteredOutput = output.filter((item) =>
-          item.date.toString().includes(year)
+          new Date(item.date).toString().includes(year)
         );
       }
 
