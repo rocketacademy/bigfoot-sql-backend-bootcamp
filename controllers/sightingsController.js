@@ -1,10 +1,11 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, commentModel, categoryModel) {
+  constructor(model, commentModel, categoryModel, likeModel) {
     super(model);
     this.commentModel = commentModel;
     this.categoryModel = categoryModel;
+    this.likeModel = likeModel;
   }
 
   // Retrieve specific sighting
@@ -105,15 +106,13 @@ class SightingsController extends BaseController {
     const { sightingId, commentId } = req.params;
     const { content } = req.body;
     try {
-      const updatedComment = await this.commentModel.update(
-        { content },
-        {
-          where: {
-            id: commentId,
-            sightingId: sightingId,
-          },
-        }
-      );
+      const commentToEdit = await this.commentModel.findOne({
+        where: {
+          sightingId: sightingId,
+          id: commentId,
+        },
+      });
+      const updatedComment = await commentToEdit.update({ content });
       return res.json(updatedComment);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -130,6 +129,41 @@ class SightingsController extends BaseController {
         },
       });
       return res.json("deleted");
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  getAllLikes = async (req, res) => {
+    const { sightingId } = req.params;
+    try {
+      const likes = await this.likeModel.findAll({
+        where: {
+          sightingId: sightingId,
+        },
+      });
+      return res.json(likes);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  addLikes = async (req, res) => {
+    const { sightingId } = req.params;
+    try {
+      let newLike = await this.likeModel.findOne({
+        where: {
+          sightingId: sightingId,
+        },
+      });
+      // Increment likeCount if the requested sightingId already exists, else create a new row with initial likeCount of 1 for that sightingId
+      newLike
+        ? await newLike.increment("likeCount")
+        : (newLike = await this.likeModel.create({
+            likeCount: 1,
+            sightingId,
+          }));
+      return res.json(newLike);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }

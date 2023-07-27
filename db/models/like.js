@@ -1,14 +1,17 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Comment extends Model {
+  class Like extends Model {
     static associate(models) {
       this.belongsTo(models.sighting);
     }
   }
-  Comment.init(
+  Like.init(
     {
-      content: DataTypes.STRING,
+      likeCount: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
       sightingId: {
         type: DataTypes.INTEGER,
         references: {
@@ -19,9 +22,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "comment",
+      modelName: "like",
       underscored: true,
     }
   );
-  return Comment;
+  return Like;
 };
