@@ -54,6 +54,7 @@ class SightingsController extends BaseController {
         where: {
           sightingId: sightingId,
         },
+        order: [["id", "ASC"]],
       });
       return res.json(allComments);
     } catch (err) {
@@ -82,7 +83,8 @@ class SightingsController extends BaseController {
 
   editSighting = async (req, res) => {
     const { sightingId } = req.params;
-    const { date, location_description, notes, city, country } = req.body;
+    const { date, location_description, notes, city, country, categoryId } =
+      req.body;
     try {
       const sightingToEdit = await this.model.findByPk(sightingId);
       await sightingToEdit.update({
@@ -92,6 +94,12 @@ class SightingsController extends BaseController {
         city,
         country,
       });
+      const selectedWeathers = await this.categoryModel.findAll({
+        where: {
+          id: categoryId,
+        },
+      });
+      await sightingToEdit.setCategories(selectedWeathers);
       const output = await this.model.findAll({
         include: this.categoryModel,
         order: [["id", "ASC"]],
