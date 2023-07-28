@@ -4,14 +4,14 @@ module.exports = (sequelize, DataTypes) => {
   class Sighting extends Model {
     static associate(models) {
       this.hasMany(models.comment);
-      this.belongsToMany(models.category, { through: "sighting_categories" });
+      this.belongsToMany(models.category, { through: "sightingCategories" });
       this.hasMany(models.like);
     }
   }
   Sighting.init(
     {
       date: DataTypes.DATE,
-      location_description: DataTypes.STRING,
+      locationDescription: DataTypes.STRING,
       notes: DataTypes.TEXT,
       city: DataTypes.STRING,
       country: DataTypes.STRING,

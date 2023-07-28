@@ -6,6 +6,7 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "production";
 const config = require("../../config/database")[env];
 const db = {};
+require("dotenv").config();
 
 let sequelize;
 if (process.env.DATABASE_URL) {

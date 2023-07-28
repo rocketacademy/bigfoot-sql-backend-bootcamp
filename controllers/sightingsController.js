@@ -1,11 +1,18 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, commentModel, categoryModel, likeModel) {
+  constructor(
+    model,
+    commentModel,
+    categoryModel,
+    likeModel,
+    sightingCategoriesModel
+  ) {
     super(model);
     this.commentModel = commentModel;
     this.categoryModel = categoryModel;
     this.likeModel = likeModel;
+    this.sightingCategoriesModel = sightingCategoriesModel;
   }
 
   // Retrieve specific sighting
@@ -23,23 +30,34 @@ class SightingsController extends BaseController {
 
   // Create a new sighting
   add = async (req, res) => {
-    const { date, location_description, notes, categoryId, city, country } =
-      req.body;
-    console.log(req.body);
+    const {
+      date,
+      locationDescription,
+      notes,
+      categoryIds,
+      city,
+      country,
+      intensityIds,
+    } = req.body;
     try {
       const newSighting = await this.model.create({
         date: date,
-        location_description: location_description,
+        locationDescription: locationDescription,
         notes: notes,
         city: city,
         country: country,
       });
-      const selectedWeathers = await this.categoryModel.findAll({
-        where: {
-          id: categoryId,
-        },
-      });
-      await newSighting.setCategories(selectedWeathers);
+
+      // Add each category with its intensity individually
+      for (let i = 0; i < categoryIds.length; i++) {
+        const categoryId = categoryIds[i];
+        const intensityId = intensityIds[i];
+
+        const selectedWeather = await this.categoryModel.findByPk(categoryId);
+        await newSighting.addCategory(selectedWeather, {
+          through: { intensity: intensityId },
+        });
+      }
       return res.json(newSighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -83,20 +101,20 @@ class SightingsController extends BaseController {
 
   editSighting = async (req, res) => {
     const { sightingId } = req.params;
-    const { date, location_description, notes, city, country, categoryId } =
+    const { date, locationDescription, notes, city, country, categoryIds } =
       req.body;
     try {
       const sightingToEdit = await this.model.findByPk(sightingId);
       await sightingToEdit.update({
         date,
-        location_description,
+        locationDescription,
         notes,
         city,
         country,
       });
       const selectedWeathers = await this.categoryModel.findAll({
         where: {
-          id: categoryId,
+          id: categoryIds,
         },
       });
       await sightingToEdit.setCategories(selectedWeathers);

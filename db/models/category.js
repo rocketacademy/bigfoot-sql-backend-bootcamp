@@ -3,7 +3,7 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Category extends Model {
     static associate(models) {
-      this.belongsToMany(models.sighting, { through: "sighting_categories" });
+      this.belongsToMany(models.sighting, { through: "sightingCategories" });
     }
   }
   Category.init(
