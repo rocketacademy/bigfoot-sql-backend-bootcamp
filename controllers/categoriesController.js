@@ -1,23 +1,13 @@
 const BaseController = require("./baseController");
 
-class SightingsController extends BaseController {
-  constructor(sighting, comment, category) {
-    super(sighting);
-    this.sighting = sighting;
-    this.comment = comment;
+class CategoriesController extends BaseController {
+  constructor(category, sighting) {
+    super(category);
     this.category = category;
+    this.sighting = sighting;
   }
 
-  // Get all Sightings and associated categories
-  async getAllSightingCategories(req, res) {
-    try {
-      const output = await this.model.findAll({ include: this.category });
-      return res.json(output);
-    } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
-    }
-  }
-
+  /*
   // Retrieve specific sighting
   async getOne(req, res) {
     const { sightingId } = req.params;
@@ -27,23 +17,40 @@ class SightingsController extends BaseController {
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
-  }
+  }*/
 
-  // Submit sighting
-  async createSighting(req, res) {
-    const { date, location, notes } = req.body;
+  // Create category
+  async createCategory(req, res) {
+    const { name } = req.body;
     try {
-      const newSighting = await this.sighting.create({
-        date: date,
-        location: location,
-        notes: notes,
+      const newCategory = await this.category.create({
+        name: name,
       });
-      return res.json(newSighting);
+      return res.json(newCategory);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
   }
 
+  // Create relationship between sighting and category
+  // post to localhost:8000/categories/create
+  async createSightingCategory(req, res) {
+    const { sightingId, categories } = req.body;
+    try {
+      const targetSighting = await this.sighting.findOne({
+        where: { id: sightingId },
+      });
+      const targetCategories = categories.map((categoryData) => {
+        return categoryData.value;
+      });
+      targetSighting.addCategory(targetCategories);
+      return res.json({ targetCategories, targetSighting });
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  /*
   // Create comment
   async createComment(req, res) {
     const { sightingId } = req.params;
@@ -74,7 +81,7 @@ class SightingsController extends BaseController {
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
-  }
+    */
 }
 
-module.exports = SightingsController;
+module.exports = CategoriesController;
