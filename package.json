@@ -2,7 +2,7 @@
   "name": "bigfoot-sql-backend-bootcamp",
   "version": "1.0.0",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "npx nodemon index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
