@@ -15,6 +15,28 @@ class SightingsController extends BaseController {
       return res.status(400).json({ error: true, msg: err });
     }
   }
+
+  // Edit specific sighting
+  async editOne(req, res) {
+    const { sightingId } = req.params;
+    const { date, city, country, location_description, notes } = req.body;
+    try {
+      const [numberOfAffectedRows, affectedRows] = await this.model.update(
+        { date, city, country, location_description, notes },
+        {
+          where: { id: sightingId },
+          returning: true, // needed for affectedRows to be populated
+        }
+      );
+      if (numberOfAffectedRows > 0) {
+        return res.json(affectedRows[0]); // return the updated sighting
+      } else {
+        return res.status(404).json({ error: true, msg: "Sighting not found" });
+      }
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
 }
 
 module.exports = SightingsController;

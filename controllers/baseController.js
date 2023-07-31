@@ -5,11 +5,27 @@ class BaseController {
 
   /* All controllers that extend this BASE controller will have access to the below function **/
 
-
   async getAll(req, res) {
     try {
       const output = await this.model.findAll();
       return res.json(output);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  // Create a new sighting
+  async createOne(req, res) {
+    const { date, city, country, location_description, notes } = req.body;
+    try {
+      const newSighting = await this.model.create({
+        date,
+        city,
+        country,
+        location_description,
+        notes,
+      });
+      return res.status(201).json(newSighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }

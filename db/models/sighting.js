@@ -14,7 +14,9 @@ module.exports = (sequelize, DataTypes) => {
   Sighting.init(
     {
       date: DataTypes.DATE,
-      location: DataTypes.STRING,
+      city: DataTypes.STRING,
+      country: DataTypes.STRING,
+      location_description: DataTypes.STRING,
       notes: DataTypes.TEXT,
     },
     {
