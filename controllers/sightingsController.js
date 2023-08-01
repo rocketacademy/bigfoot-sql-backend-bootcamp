@@ -22,9 +22,9 @@ class SightingsController extends BaseController {
 
     // Example body:
     // {
-    // "date": "2023-09-19",
-    // "location": "Outworld",
-    // "notes": "Met something with feet not only big, but has 4 of them in the Mortal Kombat tournament"
+    //   "date": "2023-09-19",
+    //   "location": "Outworld",
+    //   "notes": "Met something with feet not only big, but has 4 of them in the Mortal Kombat tournament"
     // }
 
     const sighting_date = request.body.date;
@@ -33,7 +33,7 @@ class SightingsController extends BaseController {
 
     try {
       // Create a new instance of the Sighting model with the data to be inserted
-      const newSighting = this.model.create({
+      const newSighting = await this.model.create({
         date: sighting_date,
         location: location,
         notes: notes,
@@ -41,7 +41,9 @@ class SightingsController extends BaseController {
         updated_at: new Date(),
       });
 
-      // Return the newly created sighting as a response
+      // The 'newSighting' now contains the newly created Sighting with its ID
+
+      // Return the ID of the newly created sighting as a response
       return response.json(newSighting);
     } catch (err) {
       return response.status(400).json({ error: true, msg: err });
