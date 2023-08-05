@@ -18,12 +18,14 @@ class SightingsController extends BaseController {
 
   // Create sighting
   async createSighting(req, res) {
-    const { date, location, notes } = req.body;
+    const { date, location, notes, city, country } = req.body;
     try {
       const sighting = await this.model.create({
         date: date,
-        location: location,
+        location_discription: location,
         notes: notes,
+        city: city,
+        country: country,
       });
       return res.json(sighting.id);
     } catch (err) {
@@ -33,13 +35,15 @@ class SightingsController extends BaseController {
 
   // Edit sighting
   async editSighting(req, res) {
-    const { id, date, location, notes } = req.body;
+    const { id, date, location, notes, city, country } = req.body;
     try {
       await this.model.update(
         {
           date: date,
-          location: location,
+          location_discription: location,
           notes: notes,
+          city: city,
+          country: country,
         },
         { where: { id: id } }
       );
