@@ -55,14 +55,14 @@ class SightingsController extends BaseController {
     //console.log("test get comment");
     try {
       const comment = await Comment.findByPk(sightingId);
-      return res.json(comment);
+      return response.json(comment);
     } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
+      return response.status(400).json({ error: true, msg: err });
     }
   }
   async postComment(request, response) {
     const { sightingId } = request.params;
-    console.log("posted comment");
+    
     // Example body:
     // {
     //
@@ -70,7 +70,7 @@ class SightingsController extends BaseController {
     // }
 
     const content = request.body.content;
-
+    console.log(content);
     try {
       // Create a new instance of the comment model with the data to be inserted
       const newComment = await Comment.create({
