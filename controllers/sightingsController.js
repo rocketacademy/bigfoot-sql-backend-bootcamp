@@ -1,9 +1,9 @@
 const BaseController = require("./baseController");
-const Comment = require("../db/models/comment");
 
 class SightingsController extends BaseController {
-  constructor(model) {
+  constructor(model, commentModel) {
     super(model);
+    this.commentModel = commentModel;
   }
 
   // Retrieve specific sighting
@@ -54,7 +54,7 @@ class SightingsController extends BaseController {
     const { sightingId } = request.params;
     //console.log("test get comment");
     try {
-      const comment = await Comment.findByPk(sightingId);
+      const comment = await this.commentModel.findByPk(sightingId);
       return response.json(comment);
     } catch (err) {
       return response.status(400).json({ error: true, msg: err });
@@ -62,30 +62,26 @@ class SightingsController extends BaseController {
   }
   async postComment(request, response) {
     const { sightingId } = request.params;
-    
+    console.log("posted comment");
     // Example body:
     // {
-    //
     //   "content": "Thats scary!"
     // }
-
     const content = request.body.content;
-    console.log(content);
+    
     try {
       // Create a new instance of the comment model with the data to be inserted
       const newComment = await Comment.create({
-        sighting_id: sightingId,
-
         content: content,
+        sighting_id: sightingId,
         created_at: new Date(),
         updated_at: new Date(),
       });
-
-      // The 'newSighting' now contains the newly created Sighting with its ID
-
-      // Return the ID of the newly created sighting as a response
+      
+      // Return the ID of the newly created comment as a response
       return response.json(newComment);
     } catch (err) {
+      console.log(response.json());
       return response.status(400).json({ error: true, msg: err });
     }
   }
