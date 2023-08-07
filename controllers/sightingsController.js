@@ -1,11 +1,13 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, commentModel) {
+  constructor(model, commentModel, likeModel) {
     super(model);
     this.commentModel = commentModel;
+    this.likeModel = likeModel;
   }
 
+  // Sightings
   // Retrieve specific sighting
   async getOne(req, res) {
     const { sightingId } = req.params;
@@ -54,6 +56,7 @@ class SightingsController extends BaseController {
     }
   }
 
+  // Comments
   // get comments
   async getComments(req, res) {
     const { sightingId } = req.params;
@@ -108,6 +111,36 @@ class SightingsController extends BaseController {
         where: { id: commentId },
       });
       return res.send();
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  // likes
+  // Retrieve likes count
+  async getLikes(req, res) {
+    const { sightingId } = req.params;
+    try {
+      const likes = await this.likeModel.findAll({
+        where: {
+          sightingId: sightingId,
+        },
+      });
+      return res.send(likes);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  // create like for a sighting
+  async createLike(req, res) {
+    const { sightingId } = req.params;
+    try {
+      const like = await this.likeModel.create({
+        isLiked: 1,
+        sightingId: sightingId,
+      });
+      return res.json(like);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }

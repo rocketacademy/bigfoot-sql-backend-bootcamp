@@ -6,7 +6,6 @@ class SightingsRouter {
     this.controller = controller;
   }
   routes() {
-    // we will insert routes into here later on
     // Sightings
     router.get("/", this.controller.getAll.bind(this.controller));
     router.get("/:sightingId", this.controller.getOne.bind(this.controller));
@@ -30,6 +29,17 @@ class SightingsRouter {
       "/comments",
       this.controller.deleteComment.bind(this.controller)
     );
+
+    // likes
+    router.get(
+      "/:sightingId/likes",
+      this.controller.getLikes.bind(this.controller)
+    );
+    router.post(
+      "/:sightingId/likes",
+      this.controller.createLike.bind(this.controller)
+    );
+
     return router;
   }
 }
