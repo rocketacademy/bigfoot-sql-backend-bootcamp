@@ -19,6 +19,12 @@ class SightingsRouter {
       "/:sightingId/comments",
       this.controller.createComment.bind(this.controller)
     );
+
+    router.get(
+      "/:sightingId/categories",
+      this.controller.getCategories.bind(this.controller)
+    );
+
     return router;
   }
 }

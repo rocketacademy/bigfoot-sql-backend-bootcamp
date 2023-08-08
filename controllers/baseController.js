@@ -13,23 +13,6 @@ class BaseController {
       return res.status(400).json({ error: true, msg: err });
     }
   }
-
-  // Create a new sighting
-  async createOne(req, res) {
-    const { date, city, country, location_description, notes } = req.body;
-    try {
-      const newSighting = await this.model.create({
-        date,
-        city,
-        country,
-        location_description,
-        notes,
-      });
-      return res.status(201).json(newSighting);
-    } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
-    }
-  }
 }
 
 module.exports = BaseController;
