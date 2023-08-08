@@ -1,8 +1,9 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model) {
+  constructor(model, commentModel) {
     super(model);
+    this.commentModel = commentModel;
   }
 
   // Retrieve specific sighting
@@ -34,7 +35,41 @@ class SightingsController extends BaseController {
         return res.status(404).json({ error: true, msg: "Sighting not found" });
       }
     } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
+      return res.status(400).json({ error: true, msg: err.message });
+    }
+  }
+
+  // Get comments for a given sighting
+  async getComments(req, res) {
+    const { sightingId } = req.params;
+    try {
+      const sighting = await this.model.findByPk(sightingId);
+      if (!sighting) {
+        return res.status(404).json({ error: true, msg: "Sighting not found" });
+      }
+      const comments = await sighting.getComments();
+      return res.json(comments);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err.message });
+    }
+  }
+
+  // Create a comment for a given sighting
+  async createComment(req, res) {
+    const { sightingId } = req.params;
+    const { content } = req.body;
+    try {
+      const sighting = await this.model.findByPk(sightingId);
+      if (!sighting) {
+        return res.status(404).json({ error: true, msg: "Sighting not found" });
+      }
+      const newComment = await this.commentModel.create({
+        content,
+        sighting_id: sightingId,
+      });
+      return res.json(newComment);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err.message });
     }
   }
 }

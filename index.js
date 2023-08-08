@@ -10,10 +10,10 @@ const SightingsController = require("./controllers/sightingsController");
 
 // importing DB
 const db = require("./db/models/index");
-const { comment, sighting } = db;
+const { Sighting, Comment } = db;
 
 // initializing Controllers -> note the lowercase for the first word
-const sightingsController = new SightingsController(sighting, comment);
+const sightingsController = new SightingsController(Sighting, Comment);
 
 // initializing Routers
 const sightingRouter = new SightingsRouter(sightingsController).routes();
