@@ -3,6 +3,7 @@ const BaseController = require("./baseController");
 class SightingsController extends BaseController {
   constructor(model, commentModel) {
     super(model);
+
     this.model2 = commentModel;
   }
 
@@ -71,14 +72,13 @@ class SightingsController extends BaseController {
     //console.log("posted comment");
     // Example body:
     // {
-    //
     //   "content": "Thats scary!"
     // }
-
     const content = request.body.content;
 
     try {
       // Create a new instance of the comment model with the data to be inserted
+
       const newComment = await this.model2.create({
         sighting_id: sightingId,
 
@@ -87,11 +87,10 @@ class SightingsController extends BaseController {
         updatedAt: new Date(),
       });
 
-      // The 'newSighting' now contains the newly created Sighting with its ID
-
-      // Return the ID of the newly created sighting as a response
+      // Return the ID of the newly created comment as a response
       return response.json(newComment);
     } catch (err) {
+      console.log(response.json());
       return response.status(400).json({ error: true, msg: err });
     }
   }
