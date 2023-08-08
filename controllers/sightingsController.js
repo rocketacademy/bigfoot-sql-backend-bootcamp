@@ -1,19 +1,20 @@
 const BaseController = require("./baseController");
-const Comment = require("../db/models/comment");
 
 class SightingsController extends BaseController {
-  constructor(model) {
+  constructor(model, commentModel) {
     super(model);
+    this.model2 = commentModel;
   }
 
   // Retrieve specific sighting
   async getOne(req, res) {
     const { sightingId } = req.params;
+    console.log(this.mode);
     try {
       const sighting = await this.model.findByPk(sightingId);
       return res.json(sighting);
     } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
+      return res.status(500).json({ error: true, msg: err.message });
     }
   }
   // Code to insert data
@@ -52,17 +53,22 @@ class SightingsController extends BaseController {
   }
   async getComment(request, response) {
     const { sightingId } = request.params;
-    //console.log("test get comment");
+
     try {
-      const comment = await Comment.findByPk(sightingId);
-      return res.json(comment);
+      const comments = await this.model2.findAll({
+        where: {
+          sighting_id: sightingId,
+        },
+      });
+
+      return response.json(comments);
     } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
+      return response.status(500).json({ error: true, msg: err.message });
     }
   }
   async postComment(request, response) {
     const { sightingId } = request.params;
-    console.log("posted comment");
+    //console.log("posted comment");
     // Example body:
     // {
     //
@@ -73,12 +79,12 @@ class SightingsController extends BaseController {
 
     try {
       // Create a new instance of the comment model with the data to be inserted
-      const newComment = await Comment.create({
+      const newComment = await this.model2.create({
         sighting_id: sightingId,
 
         content: content,
-        created_at: new Date(),
-        updated_at: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
 
       // The 'newSighting' now contains the newly created Sighting with its ID

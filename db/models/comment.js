@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.sighting, { foreignKey: "sighting_id" });
+      this.belongsTo(models.sightings, { foreignKey: "sighting_id" });
     }
   }
   Comment.init(
@@ -18,14 +18,14 @@ module.exports = (sequelize, DataTypes) => {
       sighting_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: "sighting",
+          model: "sightings",
           key: "id",
         },
       },
     },
     {
       sequelize,
-      modelName: "comment",
+      modelName: "comments",
       underscored: true,
     }
   );
