@@ -20,15 +20,14 @@ class SightingsController extends BaseController {
   // Create sighting
   async insertOne(req, res) {
     console.log(`POST: ${JSON.stringify(req.body)}`)
-    const { date, location, notes, createdDate } = req.body;
+    const { date, location, notes } = req.body;
     
     try {
       // Create new sighting
       const newSighting = await this.model.create({
-        date: date,
+        date: new Date(date),
         location: location,
         notes: notes,
-        createdAt: createdDate
       });
       // Respond with new sighting
       return res.json(newSighting);

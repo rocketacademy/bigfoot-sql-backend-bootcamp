@@ -24,6 +24,8 @@ const sightingRouter = new SightingsRouter(sightingsController).routes()
 
 const PORT = process.env.PORT;
 const app = express();
+// middelvare to send fake request using thunder client 
+app.use(express.json());
 
 // Enable CORS access to this server
 app.use(cors());
