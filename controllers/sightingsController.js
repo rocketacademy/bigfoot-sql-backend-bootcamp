@@ -49,7 +49,7 @@ class SightingsController extends BaseController {
       // Return the ID of the newly created sighting as a response
       return response.json(newSighting);
     } catch (err) {
-      return response.status(400).json({ error: true, msg: err });
+      return response.status(400).json({ error: true, msg: err.message });
     }
   }
   async getComment(request, response) {
