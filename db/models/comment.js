@@ -1,22 +1,28 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Sighting extends Model {
+  class Comment extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasMany(models.comment);
-      this.belongsToMany(models.category, { through: "sightingCategories" });
+      this.belongsTo(models.sighting);
     }
   }
-  Sighting.init(
+  Comment.init(
     {
-      date: DataTypes.DATE,
-      location: DataTypes.STRING,
-      notes: DataTypes.TEXT,
+      content: DataTypes.STRING,
+      SightingId: {
+        type: DataTypes.INTEGER,
+        references: {
+          // Sequelize docs suggest this should be plural table name and not singular model name
+          // https://sequelize.org/api/v6/class/src/model.js~model#static-method-init
+          model: "sightings",
+          key: "id",
+        },
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -30,9 +36,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "sighting",
+      modelName: "comment",
       underscored: true,
     }
   );
-  return Sighting;
+  return Comment;
 };

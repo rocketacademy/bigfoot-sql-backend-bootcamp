@@ -1,21 +1,27 @@
 "use strict";
+
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("sightings", {
+    await queryInterface.createTable("sighting_categories", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      date: {
-        type: Sequelize.DATE,
+      sighting_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "sightings",
+          key: "id",
+        },
       },
-      location: {
-        type: Sequelize.STRING,
-      },
-      notes: {
-        type: Sequelize.TEXT,
+      category_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "categories",
+          key: "id",
+        },
       },
       created_at: {
         allowNull: false,
@@ -28,6 +34,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("sightings");
+    await queryInterface.dropTable("sighting_categories");
   },
 };
