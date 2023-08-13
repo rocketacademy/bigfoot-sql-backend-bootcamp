@@ -1,10 +1,11 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, commentModel, likeModel) {
+  constructor(model, commentModel, likeModel, categoryModel) {
     super(model);
     this.commentModel = commentModel;
     this.likeModel = likeModel;
+    this.categoryModel = categoryModel;
   }
 
   // Sightings
@@ -21,15 +22,32 @@ class SightingsController extends BaseController {
 
   // Create sighting
   async createSighting(req, res) {
-    const { date, location, notes, city, country } = req.body;
+    const {
+      dateInput,
+      locationInput,
+      notesInput,
+      cityInput,
+      countryInput,
+      selectedCategoryIds,
+    } = req.body;
     try {
+      // Create new sighting
       const sighting = await this.model.create({
-        date: date,
-        location_discription: location,
-        notes: notes,
-        city: city,
-        country: country,
+        date: dateInput,
+        location_discription: locationInput,
+        notes: notesInput,
+        city: cityInput,
+        country: countryInput,
       });
+      // Retrieve selected categories
+      const selectedCategories = await this.categoryModel.findAll({
+        where: {
+          id: selectedCategoryIds,
+        },
+      });
+      // Associated new sighting with selected categories
+      await sighting.setCategories(selectedCategories);
+      // Respond with new sighting id
       return res.json(sighting.id);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
