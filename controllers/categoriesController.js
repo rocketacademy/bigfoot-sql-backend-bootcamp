@@ -1,5 +1,5 @@
 const BaseController = require("./baseController");
-
+const sequelize = require('sequelize');
 class CategoriesController extends BaseController {
   constructor(model) {
     super(model);
@@ -31,6 +31,9 @@ async postOneCat(request, response) {
         return response.status(500).json({ error: true, msg: err.message });
       }
   }
+ 
 }
+
+
 
 module.exports = CategoriesController;

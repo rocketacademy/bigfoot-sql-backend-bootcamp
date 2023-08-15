@@ -1,5 +1,6 @@
 const BaseController = require("./baseController");
 
+
 class SightingsController extends BaseController {
   constructor(model, commentModel) {
     super(model);
@@ -12,7 +13,9 @@ class SightingsController extends BaseController {
     const { sightingId } = req.params;
     console.log(this.mode);
     try {
-      const sighting = await this.model.findByPk(sightingId);
+      const sighting = await this.model.findByPk(sightingId, {
+        include: 'categories', // Include the associated Category model
+      });
       return res.json(sighting);
     } catch (err) {
       return res.status(500).json({ error: true, msg: err.message });
@@ -25,14 +28,16 @@ class SightingsController extends BaseController {
 
     // Example body:
     // {
-    //   "date": "2023-09-19",
-    //   "location": "Outworld",
-    //   "notes": "Met something with feet not only big, but has 4 of them in the Mortal Kombat tournament"
+    //   "date": "2023-08-15",
+    //   "location": "NTU COSMO Lab",
+    //   "notes": "In my office doing up bigfoot project. Suddenly was ambushed by a bigfoot made up in my mind. Decide to add categories 'close range' and 'new cat' to it",
+    //   "categoryIds": [2,7]
     // }
 
     const sighting_date = request.body.date;
     const location = request.body.location;
     const notes = request.body.notes;
+    const category_ID = request.body.categoryIds;
 
     try {
       // Create a new instance of the Sighting model with the data to be inserted
@@ -46,6 +51,8 @@ class SightingsController extends BaseController {
 
       // The 'newSighting' now contains the newly created Sighting with its ID
 
+      // Add category ID and sighting ID to sighting_categories table
+      await newSighting.addCategories(category_ID);
       // Return the ID of the newly created sighting as a response
       return response.json(newSighting);
     } catch (err) {

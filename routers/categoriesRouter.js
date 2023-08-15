@@ -10,6 +10,7 @@ class CategoriesRouter {
         router.get("/", this.controller.getAll.bind(this.controller));
         
         router.post("/", this.controller.postOneCat.bind(this.controller));
+        
         return router;
       }
 
