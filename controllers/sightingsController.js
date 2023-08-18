@@ -1,14 +1,15 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, commentModel) {
+  constructor(model, commentModel, categoryModel) {
     super(model);
     this.commentModel = commentModel;
+    this.categoryModel = categoryModel;
   }
 
   // Create sighting
   async insertOne(req, res) {
-    const { date, location, notes } = req.body;
+    const { date, location, notes, selectedCategoryIds } = req.body;
     try {
       // Create new sighting
       const newSighting = await this.model.create({
@@ -16,6 +17,12 @@ class SightingsController extends BaseController {
         location: location,
         notes: notes,
       });
+      const selectedCategories = await this.categoryModel.findAll({
+        where: {
+          id: selectedCategoryIds,
+        },
+      });
+      await newSighting.setCategories(selectedCategories);
       // Respond with new sighting
       return res.json(newSighting);
     } catch (err) {
@@ -27,7 +34,9 @@ class SightingsController extends BaseController {
   async getOne(req, res) {
     const { sightingId } = req.params;
     try {
-      const sighting = await this.model.findByPk(sightingId);
+      const sighting = await this.model.findByPk(sightingId, {
+        include: this.categoryModel,
+      });
       return res.json(sighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
