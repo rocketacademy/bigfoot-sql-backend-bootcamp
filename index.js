@@ -26,6 +26,9 @@ const app = express();
 // Enable CORS access to this server
 app.use(cors());
 
+// Add Express JSON middleware
+app.use(express.json());
+
 // using the routers
 app.use('/sightings', sightingRouter)
 
