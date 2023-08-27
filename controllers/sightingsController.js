@@ -35,6 +35,33 @@ class SightingsController extends BaseController {
       return res.status(400).json({ error: true, msg: err });
     }
   }
+
+  // Edit  sighting
+  async editOne(req, res) {
+    // To get data from the user
+    const id = req.params.sightingId; //get the product id
+    console.log(`ID TO BE EDITED: ${id}`)
+    console.log(`POST: ${JSON.stringify(req.body)}`)
+    const {date, location, notes } = req.body; //get from form
+    
+    try {
+      // Edit sighting
+      const editSighting = await this.model.update({
+        date: new Date(date),
+        location: location,
+        notes: notes,
+      }, {
+        where:{
+          id: id //Find the id of interest from user req
+        }
+      });
+      // Respond with new sighting
+      return res.json(editSighting);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+  
 }
 
 module.exports = SightingsController;
