@@ -42,7 +42,7 @@ class SightingsController extends BaseController {
     const id = req.params.sightingId; //get the product id
     console.log(`ID TO BE EDITED: ${id}`)
     console.log(`POST: ${JSON.stringify(req.body)}`)
-    const {date, location, notes } = req.body; //get from form
+    const {date, location, notes, city, country } = req.body; //get from form
     
     try {
       // Edit sighting
@@ -50,6 +50,8 @@ class SightingsController extends BaseController {
         date: new Date(date),
         location: location,
         notes: notes,
+        city: city,
+        country: country,
       }, {
         where:{
           id: id //Find the id of interest from user req
