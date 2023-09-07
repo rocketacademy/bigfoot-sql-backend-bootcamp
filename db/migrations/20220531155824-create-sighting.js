@@ -11,11 +11,17 @@ module.exports = {
       date: {
         type: Sequelize.DATE,
       },
-      location: {
+      locationDescription: {
         type: Sequelize.STRING,
       },
       notes: {
         type: Sequelize.TEXT,
+      },
+      city : {
+        type: Sequelize.STRING,
+      },
+      country: {
+        type: Sequelize.STRING,
       },
       created_at: {
         allowNull: false,

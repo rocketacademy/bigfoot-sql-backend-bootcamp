@@ -12,6 +12,8 @@ const SightingsController = require('./controllers/sightingsController')
 // importing DB
 const db = require('./db/models/index')
 const { comment, sighting } = db;
+// console.log(`Comment: ${comment}`)
+// console.log(`Sighting: ${sighting}`)
 
 // initializing Controllers -> note the lowercase for the first word
 const sightingsController = new SightingsController(sighting, comment)
@@ -22,6 +24,8 @@ const sightingRouter = new SightingsRouter(sightingsController).routes()
 
 const PORT = process.env.PORT;
 const app = express();
+// middelvare to send fake request using thunder client 
+app.use(express.json());
 
 // Enable CORS access to this server
 app.use(cors());

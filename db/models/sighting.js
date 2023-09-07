@@ -11,11 +11,15 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
+
+  //Apparently this models will be initialized
   Sighting.init(
     {
       date: DataTypes.DATE,
       location: DataTypes.STRING,
       notes: DataTypes.TEXT,
+      city : DataTypes.STRING, //add new columns
+      country: DataTypes.STRING, //add new columns
     },
     {
       sequelize,
