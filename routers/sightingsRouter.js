@@ -15,6 +15,10 @@ class SightingsRouter {
     router.post("/:sightingId/comments", this.controller.newComment.bind(this.controller));
     router.put("/:sightingId/comments/:commentId", this.controller.editComment.bind(this.controller))
     router.delete("/:sightingId/comments/:commentId", this.controller.deleteComment.bind(this.controller))
+    router.get("/:sightingId/likes", this.controller.getLikes.bind(this.controller))
+    router.post("/:sightingId/likes", this.controller.postLike.bind(this.controller))
+    router.delete("/:sightingId/likes/:userId", this.controller.deleteLike.bind(this.controller))
+    //one more route to get all likes for all filtered sightings?
     return router;
   }
 }

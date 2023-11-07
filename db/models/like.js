@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Like.init(
       {
-          username: DataTypes.TEXT,
+          userId: DataTypes.STRING,
           sightingId: {
               type: DataTypes.INTEGER,
               allowNull: false,

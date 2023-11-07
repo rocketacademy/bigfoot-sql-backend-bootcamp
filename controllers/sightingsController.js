@@ -1,9 +1,10 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, commentModel) {
+  constructor(model, commentModel, likeModel) {
     super(model);
     this.commentModel = commentModel;
+    this.likeModel = likeModel;
   }
 
   // Retrieve specific sighting
@@ -53,7 +54,6 @@ class SightingsController extends BaseController {
   }
   async getComments(req, res) {
     const { sightingId } = req.params;
-    console.log('getting')
     try {
       const comments = await this.commentModel.findAll({
         where: {sightingId}, // sightingId:sightingId
@@ -110,6 +110,48 @@ class SightingsController extends BaseController {
       }) 
       
       return res.json({ success: true});
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  async getLikes(req, res) {
+    const { sightingId } = req.params;
+    try {
+      const likes = await this.likeModel.findAll({
+        where: {sightingId}, // sightingId:sightingId
+      })
+      return res.json({ success: true, likes});
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  //router.put("/:sightingId/likes", this.controller.toggleLike.bind(this.controller))
+  async postLike(req, res) {
+    const { sightingId } = req.params;
+    const { userId } = req.body; //rmb to chg frontend to user
+    try {
+      const newLike = await this.likeModel.create({
+        userId,
+        sightingId,
+      });
+      return res.json({ success: true, newLike });
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  async deleteLike(req, res) {
+    const { sightingId, userId } = req.params;
+    try {
+      await this.likeModel.destroy({
+        where:{
+          sightingId, 
+          userId
+        }
+      }) 
+      return res.json({success: true});
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
