@@ -1,17 +1,30 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, commentModel, likeModel) {
+  constructor(model, commentModel, likeModel,categoryModel) {
     super(model);
     this.commentModel = commentModel;
     this.likeModel = likeModel;
+    this.categoryModel = categoryModel;
+
   }
+
+  async getAll(req, res) {
+    //const {sortBy, sortOrder, ...sightingFilters} = req.query
+    try {
+      const output = await this.model.findAll({include:this.categoryModel, order: ['id']});
+      return res.json(output);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
 
   // Retrieve specific sighting
   async getOne(req, res) {
     const { sightingId } = req.params;
     try {
-      const sighting = await this.model.findByPk(sightingId);
+      const sighting = await this.model.findByPk(sightingId, {include:this.categoryModel});
       return res.json(sighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -19,35 +32,52 @@ class SightingsController extends BaseController {
   }
 
   async postOne(req, res) {
-    const { date, location, notes } = req.body;
-    if (!date || !location || !notes) {
+    const { date, locationDescription, notes, city, country, selectedCategoryIds } = req.body;
+    if (!date || !locationDescription || !notes || !city || !country || !selectedCategoryIds) {
       res.status(400).json({ success: false, msg: 'input error' })
     }
     try {
       const newSighting = await this.model.create({
         date,
-        location,
+        locationDescription,
         notes,
+        city,
+        country,
       });
-      return res.json({ success: true, sighting: newSighting })
+      const selectedCategories = await this.categoryModel.findAll({
+        where:{
+          id:selectedCategoryIds
+        }
+      })
+      const associatedCategories = await newSighting.setCategories(selectedCategories)
+      return res.json({ success: true, sighting: newSighting, associatedCategories })
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
   }
+
   async putOne(req, res) {
     const { sightingId } = req.params;
-    const { date, location, notes } = req.body;
-    if (!date || !location || !notes) {
+    const { date, locationDescription, notes, city, country, selectedCategoryIds } = req.body;
+    if (!date || !locationDescription || !notes || !city || !country || !selectedCategoryIds) {
       res.status(400).json({ success: false, msg: 'input error' })
-    }
+    }  
     try {
       const sighting = await this.model.findByPk(sightingId);
       await sighting.update({
-        date: date,
-        location: location,
-        notes: notes,
+        date,
+        locationDescription,
+        notes,
+        city,
+        country
       })
-      return res.json({ success: true, sighting: sighting });
+      const selectedCategories = await this.categoryModel.findAll({
+        where:{
+          id:selectedCategoryIds
+        }
+      })
+      const associatedCategories = await sighting.setCategories(selectedCategories)
+      return res.json({ success: true, sighting: sighting, associatedCategories });
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }

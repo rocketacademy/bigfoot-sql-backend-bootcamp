@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Sighting.hasMany(models.comment) // 'comment' is taken from the modelName
       Sighting.hasMany(models.like) // 'comment' is taken from the modelName
+      Sighting.belongsToMany(models.category, {through:'sightings_categories'})
     }
   }
   Sighting.init(
