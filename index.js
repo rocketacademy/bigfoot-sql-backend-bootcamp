@@ -23,7 +23,7 @@ const categoriesRouter = new CategoriesRouter(categoriesController).routes()
 const sightingRouter = new SightingsRouter(sightingsController).routes()
 
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 const app = express();
 
 // Enable CORS access to this server
