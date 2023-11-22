@@ -14,24 +14,23 @@ module.exports = (sequelize, DataTypes) => {
   }
   Sighting.init(
     {
-      date: DataTypes.DATE,
-      location: DataTypes.STRING,
-      notes: DataTypes.TEXT,
-      createdAt: {
+      date: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: new Date(),
       },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: new Date(),
+      location: {
+        type: DataTypes.STRING,
+      },
+      notes: {
+        type: DataTypes.TEXT,
       },
     },
     {
       sequelize,
       modelName: "sighting",
       underscored: true,
+      timestamps: true,
     }
   );
   return Sighting;
