@@ -11,7 +11,7 @@ module.exports = {
     await queryInterface.renameColumn(
       "sightings",
       "location",
-      "locationDescription"
+      "location_description"
     );
   },
 
