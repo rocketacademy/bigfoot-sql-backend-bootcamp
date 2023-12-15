@@ -10,6 +10,7 @@ class SightingsRouter {
     router.get("/", this.controller.getAll.bind(this.controller));
     router.get("/:sightingId", this.controller.getOne.bind(this.controller));
     router.post("/", this.controller.createSigthing.bind(this.controller));
+    router.put("/:sightingId", this.controller.editData.bind(this.controller));
     return router;
   }
 }
