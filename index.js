@@ -15,7 +15,7 @@ const { comment, sighting } = db;
 // initializing Controllers -> note the lowercase for the first word
 const sightingsController = new SightingsController(sighting, comment);
 
-// inittializing Routers
+// initializing Routers
 const sightingRouter = new SightingsRouter(sightingsController).routes();
 
 const PORT = process.env.PORT;
