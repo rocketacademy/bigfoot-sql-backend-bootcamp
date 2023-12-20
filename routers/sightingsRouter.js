@@ -33,7 +33,7 @@ class SightingsRouter {
     );
 
     router.get(
-      "/:sightingId/like",
+      "/:sightingId/likes",
       this.controller.getLikes.bind(this.controller)
     );
 
