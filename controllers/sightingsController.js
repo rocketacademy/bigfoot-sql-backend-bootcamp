@@ -65,6 +65,20 @@ class SightingsController extends BaseController {
       return res.status(400).json({ error: true, msg: err });
     }
   }
+
+  async editComment(req, res) {
+    const comment = req.body;
+    const commentId = req.body.id;
+
+    try {
+      const newComments = await this.commentModel.update(comment, {
+        where: { id: commentId },
+      });
+      return res.json(newComments);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
 }
 
 module.exports = SightingsController;

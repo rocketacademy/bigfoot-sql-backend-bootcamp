@@ -19,6 +19,10 @@ class SightingsRouter {
       "/:sightingId/comments",
       this.controller.addComment.bind(this.controller)
     );
+    router.put(
+      "/:sightingId/comments",
+      this.controller.editComment.bind(this.controller)
+    );
     return router;
   }
 }
