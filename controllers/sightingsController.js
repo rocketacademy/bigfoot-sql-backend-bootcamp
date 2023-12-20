@@ -68,7 +68,7 @@ class SightingsController extends BaseController {
 
   async editComment(req, res) {
     const comment = req.body;
-    const commentId = req.body.id;
+    const { commentId } = req.params;
     try {
       const newComments = await this.commentModel.update(comment, {
         where: { id: commentId },
@@ -80,7 +80,7 @@ class SightingsController extends BaseController {
   }
 
   async deleteComment(req, res) {
-    const commentId = req.body.id;
+    const { commentId } = req.params;
     try {
       await this.commentModel.destroy({
         where: { id: commentId },
