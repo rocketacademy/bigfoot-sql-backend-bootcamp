@@ -32,6 +32,11 @@ class SightingsRouter {
       this.controller.addLike.bind(this.controller)
     );
 
+    router.get(
+      "/:sightingId/like",
+      this.controller.getLikes.bind(this.controller)
+    );
+
     return router;
   }
 }

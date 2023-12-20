@@ -101,6 +101,18 @@ class SightingsController extends BaseController {
       return res.status(400).json({ error: true, msg: err });
     }
   }
+
+  async getLikes(req, res) {
+    const { sightingId } = req.params;
+    try {
+      const likes = await this.likeModel.findAndCountAll({
+        where: { sightingId: sightingId },
+      });
+      return res.json(likes);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
 }
 
 module.exports = SightingsController;
