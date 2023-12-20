@@ -1,9 +1,10 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(sightingModel, commentModel) {
+  constructor(sightingModel, commentModel, likeModel) {
     super(sightingModel);
     this.commentModel = commentModel;
+    this.likeModel = likeModel;
   }
 
   // Retrieve specific sighting
@@ -86,6 +87,16 @@ class SightingsController extends BaseController {
         where: { id: commentId },
       });
       return res.send("Delete completed");
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  async addLike(req, res) {
+    const { sightingId } = req.params;
+    try {
+      await this.likeModel.create({ sightingId: sightingId });
+      return res.send("Liked");
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
