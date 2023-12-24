@@ -1,8 +1,8 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(sightingModel, commentModel, likeModel) {
-    super(sightingModel);
+  constructor(model, commentModel, likeModel) {
+    super(model);
     this.commentModel = commentModel;
     this.likeModel = likeModel;
   }
@@ -11,7 +11,7 @@ class SightingsController extends BaseController {
   async getOne(req, res) {
     const { sightingId } = req.params;
     try {
-      const sighting = await this.sightingModel.findByPk(sightingId);
+      const sighting = await this.model.findByPk(sightingId);
       return res.json(sighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -21,7 +21,7 @@ class SightingsController extends BaseController {
   async createSigthing(req, res) {
     const data = req.body;
     try {
-      const newData = await this.sightingModel.create(data);
+      const newData = await this.model.create(data);
       return res.json(newData);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -32,7 +32,7 @@ class SightingsController extends BaseController {
     const { sightingId } = req.params;
     const data = req.body;
     try {
-      const sighting = await this.sightingModel.update(data, {
+      const sighting = await this.model.update(data, {
         where: { id: sightingId },
       });
       return res.json(sighting);
