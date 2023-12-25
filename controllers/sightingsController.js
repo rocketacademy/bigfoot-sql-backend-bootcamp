@@ -25,7 +25,9 @@ class SightingsController extends BaseController {
     const data = req.body;
     try {
       const newData = await this.model.create(data);
-      const categoryInTable = await this.categoryModel.findByPk(categoryId);
+      const categoryInTable = await this.categoryModel.findAll({
+        where: { id: categoryId },
+      });
       await newData.setCategories(categoryInTable);
       return res.json(newData);
     } catch (err) {
