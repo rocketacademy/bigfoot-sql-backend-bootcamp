@@ -20,14 +20,12 @@ class SightingsController extends BaseController {
   }
 
   async createSigthing(req, res) {
-    const category = req.body.category;
+    const categoryId = req.body.category;
     delete req.body.category;
     const data = req.body;
     try {
       const newData = await this.model.create(data);
-      const categoryInTable = await this.categoryModel.findAll({
-        where: { name: category },
-      });
+      const categoryInTable = await this.categoryModel.findByPk(categoryId);
       await newData.setCategories(categoryInTable);
       return res.json(newData);
     } catch (err) {
