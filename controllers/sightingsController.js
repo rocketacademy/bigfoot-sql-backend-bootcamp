@@ -13,7 +13,7 @@ class SightingsController extends BaseController {
     const { sightingId } = req.params;
     try {
       const sighting = await this.model.findByPk(sightingId, {
-        include: this.categoryModel,
+        include: [this.categoryModel, this.likeModel, this.commentModel],
       });
       return res.json(sighting);
     } catch (err) {
