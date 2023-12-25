@@ -13,24 +13,28 @@ const CategoriesController = require("./controllers/catagoriesController");
 const db = require("./db/models/index");
 const { comment, sighting, like, category } = db;
 
-// initializing Controllers -> note the lowercase for the first word
-const sightingsController = new SightingsController(sighting, comment, like);
+// // initializing Controllers -> note the lowercase for the first word
+const sightingsController = new SightingsController(
+  sighting,
+  comment,
+  like,
+  category
+);
 const categoriesController = new CategoriesController(category);
 
-// initializing Routers
+// // initializing Routers
 const sightingRouter = new SightingsRouter(sightingsController).routes();
 const categoriesRouter = new CategoriesRouter(categoriesController).routes();
 
 const PORT = process.env.PORT;
 const app = express();
 app.use(express.json());
-// Enable CORS access to this server
+// // Enable CORS access to this server
 app.use(cors());
 
-// using the routers
+// // using the routers
 app.use("/sightings", sightingRouter);
 app.use("/categories", categoriesRouter);
-
 app.listen(PORT, () => {
   console.log(`Express app listening on port ${PORT}!`);
 });
