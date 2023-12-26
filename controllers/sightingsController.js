@@ -48,13 +48,13 @@ class SightingsController extends BaseController {
       const categoryInTable = await this.categoryModel.findOne({
         where: { id: categoryId },
       });
-      await newData.setCategories(categoryInTable, {
+      await newData.addCategory(categoryInTable, {
         through: { intensity: intensity },
       });
-      await this.sightingcategoryModel.update(
-        { intensity: intensity },
-        { where: { sightingId: newData.id } }
-      );
+      // await this.sightingcategoryModel.update(
+      //   { intensity: intensity },
+      //   { where: { sightingId: newData.id } }
+      // );
       return res.json(newData);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
