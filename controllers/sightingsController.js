@@ -1,11 +1,18 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, commentModel, likeModel, categoryModel) {
+  constructor(
+    model,
+    commentModel,
+    likeModel,
+    categoryModel,
+    sightingcategoryModel
+  ) {
     super(model);
     this.commentModel = commentModel;
     this.likeModel = likeModel;
     this.categoryModel = categoryModel;
+    this.sightingcategoryModel = sightingcategoryModel;
   }
 
   // Retrieve specific sighting
@@ -30,16 +37,24 @@ class SightingsController extends BaseController {
     }
   }
 
-  async createSigthing(req, res) {
+  async createSighting(req, res) {
     const categoryId = req.body.category;
+    const intensity = req.body.intensity;
     delete req.body.category;
+    delete req.body.intensity;
     const data = req.body;
     try {
       const newData = await this.model.create(data);
-      const categoryInTable = await this.categoryModel.findAll({
+      const categoryInTable = await this.categoryModel.findOne({
         where: { id: categoryId },
       });
-      await newData.setCategories(categoryInTable);
+      await newData.setCategories(categoryInTable, {
+        through: { intensity: intensity },
+      });
+      await this.sightingcategoryModel.update(
+        { intensity: intensity },
+        { where: { sightingId: newData.id } }
+      );
       return res.json(newData);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });

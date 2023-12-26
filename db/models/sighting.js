@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.comment);
       this.hasMany(models.like);
       this.belongsToMany(models.category, { through: "sighting_categories" });
+      this.hasMany(models.sightingcategory);
     }
   }
   Sighting.init(
