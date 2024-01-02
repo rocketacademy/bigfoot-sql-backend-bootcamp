@@ -27,7 +27,7 @@ const categoriesController = new CategoriesController(category);
 const sightingRouter = new SightingsRouter(sightingsController).routes();
 const categoriesRouter = new CategoriesRouter(categoriesController).routes();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 // // Enable CORS access to this server
