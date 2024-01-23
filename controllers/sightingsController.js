@@ -31,6 +31,21 @@ class SightingsController extends BaseController {
       console.error("Error adding sighting:", error);
     }
   };
+
+  //delete
+  delete = async (req, res) => {
+    const { sightingId } = req.params;
+    try {
+      const deleteSighting = await this.model.destroy({
+        where: {
+          id: sightingId,
+        },
+      });
+      res.json(deleteSighting);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
 }
 
 module.exports = SightingsController;
