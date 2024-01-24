@@ -11,6 +11,8 @@ class SightingsRouter {
     router.post("/", this.controller.add);
     router.get("/:sightingId", this.controller.getOne.bind(this.controller));
     //delete
+    router.put("/:sightingId", this.controller.edit);
+    //delete
     router.delete("/:sightingId", this.controller.delete);
     return router;
   }

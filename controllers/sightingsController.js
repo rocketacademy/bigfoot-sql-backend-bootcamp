@@ -46,6 +46,30 @@ class SightingsController extends BaseController {
       return res.status(400).json({ error: true, msg: err });
     }
   };
+
+  ////edit
+  edit = async (req, res) => {
+    const { date, location, notes } = req.body;
+    const { sightingId } = req.params;
+    try {
+      await this.model.update(
+        {
+          date: date,
+          location: location,
+          notes: notes,
+        },
+        {
+          where: {
+            id: sightingId,
+          },
+        }
+      );
+      const output = await this.model.findAll();
+      res.json(output);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
 }
 
 module.exports = SightingsController;
