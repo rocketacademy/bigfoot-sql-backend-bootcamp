@@ -1,10 +1,11 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, commentModel) {
+  constructor(model, commentModel, categoryModel) {
     super(model);
     //comment model
     this.commentModel = commentModel;
+    this.categoryModel = categoryModel;
   }
 
   // Retrieve specific sighting
@@ -28,7 +29,7 @@ class SightingsController extends BaseController {
         notes: notes,
       });
       // Respond to the user
-      res.send(newSighting);
+      return res.send(newSighting);
     } catch (error) {
       console.error("Error adding sighting:", error);
     }
@@ -43,7 +44,7 @@ class SightingsController extends BaseController {
           id: sightingId,
         },
       });
-      res.json(deleteSighting);
+      return res.json(deleteSighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
@@ -67,7 +68,7 @@ class SightingsController extends BaseController {
         }
       );
       const output = await this.model.findAll();
-      res.json(output);
+      return res.json(output);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }

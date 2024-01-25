@@ -15,12 +15,13 @@ module.exports = (sequelize, DataTypes) => {
   }
   Comment.init(
     {
-      content: DataTypes.TEXT,
-      //captial S in singing.js
-      SightingId: {
+      content: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      sightingId: {
         type: DataTypes.INTEGER,
         references: {
-          //table must be plurul
           model: "sightings",
           key: "id",
         },
@@ -30,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "comment",
       underscored: true,
+      timestamps: true,
     }
   );
   return Comment;

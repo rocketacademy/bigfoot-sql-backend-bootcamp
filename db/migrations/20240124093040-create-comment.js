@@ -13,6 +13,9 @@ module.exports = {
       },
       sighting_id: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "sightings",
+          key: "id",
       },
       created_at: {
         allowNull: false,
