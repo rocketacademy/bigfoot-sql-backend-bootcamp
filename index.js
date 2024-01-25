@@ -15,7 +15,6 @@ const { comment, sighting } = db;
 
 // initializing Controllers -> note the lowercase for the first word
 const sightingsController = new SightingsController(sighting, comment)
-
 // inittializing Routers
 const sightingRouter = new SightingsRouter(sightingsController).routes()
 
@@ -25,6 +24,7 @@ const app = express();
 
 // Enable CORS access to this server
 app.use(cors());
+app.use(express.json());
 
 // using the routers
 app.use('/sightings', sightingRouter)
