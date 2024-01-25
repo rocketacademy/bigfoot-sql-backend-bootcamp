@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class comment extends Model {
+  class Comment extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,9 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.sighting);
     }
   }
-  comment.init(
+  Comment.init(
     {
-      content: DataTypes.STRING,
+      content: DataTypes.TEXT,
       //captial S in singing.js
       SightingId: {
         type: DataTypes.INTEGER,
@@ -32,5 +32,5 @@ module.exports = (sequelize, DataTypes) => {
       underscored: true,
     }
   );
-  return comment;
+  return Comment;
 };
