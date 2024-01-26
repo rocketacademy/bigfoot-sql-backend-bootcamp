@@ -1,3 +1,8 @@
+// base controller is not in index.js.
+// base controller is like a "refactor" of all controllers. Just extend this to the respesive controller, and this function will work for each "controller".
+// does not extend out like CSS coding. 
+// super(model) = extending hte 
+
 class BaseController {
   constructor(model) {
     this.model = model;

@@ -1,5 +1,8 @@
 const BaseController = require("./baseController");
 
+//super(model) is a first "element" that's defined in the router, under index.js
+//can rename "model" if i wish
+
 class SightingsController extends BaseController {
   constructor(model, commentModel, categoryModel) {
     super(model);

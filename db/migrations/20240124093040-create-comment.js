@@ -9,13 +9,14 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       content: {
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
       },
       sighting_id: {
         type: Sequelize.INTEGER,
         references: {
           model: "sightings",
           key: "id",
+        },
       },
       created_at: {
         allowNull: false,
