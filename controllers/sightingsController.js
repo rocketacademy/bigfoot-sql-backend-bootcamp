@@ -1,16 +1,23 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(model, commentModel) {
+  constructor(model, commentModel, categoryModel) {
     super(model);
 		this.commentModel = commentModel
+		this.categoryModel = categoryModel
   }
+
 
   // Retrieve specific sighting
   async getOne(req, res) {
     const { sightingId } = req.params;
     try {
-      const sighting = await this.model.findByPk(sightingId);
+			const sighting = await this.model.findOne({
+				where: {
+					id:sightingId
+				},
+				include: this.categoryModel
+			});
       return res.json(sighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -53,13 +60,20 @@ class SightingsController extends BaseController {
 	
 	async addSighting(req,res){
 		console.log(req.body)
-		const { date, location, notes } = req.body
+		const { date, location, notes, categories} = req.body
 		try{
-			await this.model.create({
+			const newSighting = await this.model.create({
 				date: new Date(date),
 				location: location, 
 				notes: notes, 
 			})
+			const selectedCategories = await this.categoryModel.findAll({
+				where:{
+					id: categories
+				}
+			})
+			console.log("selectedCategories",selectedCategories)
+			await newSighting.setCategories(selectedCategories)
 			return res.status(200).send("The record was submitted successfully")
 		}
 		catch(err){
