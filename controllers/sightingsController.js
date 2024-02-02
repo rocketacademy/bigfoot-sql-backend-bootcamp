@@ -24,7 +24,7 @@ class SightingsController extends BaseController {
     }
   }
 
-  // add sightings
+  // // add sightings
   // add = async (req, res) => {
   //   //pass in categories id too for junction table
   //   const { date, location, notes } = req.body;
@@ -58,6 +58,7 @@ class SightingsController extends BaseController {
           id: selectedCategoryIds,
         },
       });
+
       // Associated new sighting with selected categories
       await newSighting.setCategories(selectedCategories);
       // Respond with new sighting
