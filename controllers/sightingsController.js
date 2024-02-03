@@ -18,6 +18,11 @@ class SightingsController extends BaseController {
   // Retrieve specific sighting
   async getOne(req, res) {
     const { sightingId } = req.params;
+    if (isNaN(Number(sightingId))) {
+      return res
+        .status(400)
+        .json({ error: true, msg: "Wrong Type of sightingID" });
+    }
     try {
       const sighting = await this.model.findByPk(sightingId, {
         include: [this.categoryModel, this.likeModel, this.commentModel],
@@ -38,16 +43,10 @@ class SightingsController extends BaseController {
   }
 
   async createSighting(req, res) {
-    const categoryId = req.body.category;
-    const intensity = req.body.intensity;
-    delete req.body.category;
-    delete req.body.intensity;
-    const data = req.body;
+    const { category, intensity, ...data } = req.body;
     try {
       const newData = await this.model.create(data);
-      const categoryInTable = await this.categoryModel.findOne({
-        where: { id: categoryId },
-      });
+      const categoryInTable = await this.categoryModel.findByPk(category);
       await newData.setCategories(categoryInTable, {
         through: { intensity: intensity },
       });
@@ -64,6 +63,11 @@ class SightingsController extends BaseController {
   async editData(req, res) {
     const { sightingId } = req.params;
     const data = req.body;
+    if (isNaN(Number(sightingId))) {
+      return res
+        .status(400)
+        .json({ error: true, msg: "Wrong Type of sightingID" });
+    }
     try {
       const sighting = await this.model.update(data, {
         where: { id: sightingId },
@@ -76,6 +80,11 @@ class SightingsController extends BaseController {
 
   async getComments(req, res) {
     const { sightingId } = req.params;
+    if (isNaN(Number(sightingId))) {
+      return res
+        .status(400)
+        .json({ error: true, msg: "Wrong Type of sightingID" });
+    }
     try {
       const comments = await this.commentModel.findAll({
         where: {
@@ -90,8 +99,12 @@ class SightingsController extends BaseController {
 
   async addComment(req, res) {
     const { sightingId } = req.params;
+    if (isNaN(Number(sightingId))) {
+      return res
+        .status(400)
+        .json({ error: true, msg: "Wrong Type of sightingID" });
+    }
     const comment = { ...req.body, sightingId: sightingId };
-
     try {
       const newComments = await this.commentModel.create(comment);
       return res.json(newComments);
@@ -101,8 +114,14 @@ class SightingsController extends BaseController {
   }
 
   async editComment(req, res) {
-    const comment = req.body;
     const { commentId } = req.params;
+    if (isNaN(Number(commentId))) {
+      return res
+        .status(400)
+        .json({ error: true, msg: "Wrong Type of commentID" });
+    }
+    const comment = req.body;
+
     try {
       const newComments = await this.commentModel.update(comment, {
         where: { id: commentId },
@@ -115,6 +134,11 @@ class SightingsController extends BaseController {
 
   async deleteComment(req, res) {
     const { commentId } = req.params;
+    if (isNaN(Number(commentId))) {
+      return res
+        .status(400)
+        .json({ error: true, msg: "Wrong Type of commentID" });
+    }
     try {
       await this.commentModel.destroy({
         where: { id: commentId },
@@ -127,6 +151,11 @@ class SightingsController extends BaseController {
 
   async addLike(req, res) {
     const { sightingId } = req.params;
+    if (isNaN(Number(sightingId))) {
+      return res
+        .status(400)
+        .json({ error: true, msg: "Wrong Type of sightingID" });
+    }
     try {
       await this.likeModel.create({ sightingId: sightingId });
       return res.send("Liked");
@@ -137,6 +166,11 @@ class SightingsController extends BaseController {
 
   async getLikes(req, res) {
     const { sightingId } = req.params;
+    if (isNaN(Number(sightingId))) {
+      return res
+        .status(400)
+        .json({ error: true, msg: "Wrong Type of sightingID" });
+    }
     try {
       const likes = await this.likeModel.findAndCountAll({
         where: { sightingId: sightingId },

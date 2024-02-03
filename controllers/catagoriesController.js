@@ -6,9 +6,13 @@ class CategoriesController extends BaseController {
   }
 
   async createCategory(req, res) {
-    const data = req.body;
-    const newCat = await this.model.create(data);
-    return res.json(newCat);
+    const { name } = req.body;
+    try {
+      const newCat = await this.model.create({ name: name });
+      return res.json(newCat);
+    } catch (error) {
+      return res.status(400).json({ error: true, msg: error });
+    }
   }
 }
 

@@ -19,7 +19,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "sightingcategory",
-      tableName: "sighting_categories",
       underscored: true,
     }
   );
