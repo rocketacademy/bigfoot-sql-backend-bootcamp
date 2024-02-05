@@ -12,8 +12,11 @@ const SightingsController = require("./controllers/sightingsController");
 const db = require("./db/models/index");
 const { comment, sighting } = db;
 
+console.log(comment);
 // initializing Controllers -> note the lowercase for the first word
 const sightingsController = new SightingsController(sighting, comment);
+
+//sighiting is the only model currently being passed in through sightingscontroller.
 
 // inittializing Routers
 const sightingRouter = new SightingsRouter(sightingsController).routes();
