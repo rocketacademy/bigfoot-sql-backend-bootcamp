@@ -6,6 +6,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("sighting_categories");
+    await queryInterface.removeTable("sighting_categories", "intensity");
   },
 };
