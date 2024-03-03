@@ -19,7 +19,6 @@ class CommentsController extends BaseController {
 
   async createComment(req, res) {
     const comment = req.body;
-    console.log(comment);
     try {
       const newComment = await this.model.create(comment);
       return res.json(newComment);
