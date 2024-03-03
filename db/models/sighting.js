@@ -9,9 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      console.log(models.Sighting);
       this.hasMany(models.comment);
-      this.belongsToMany(models.Category, {
-        through: models.sighting_categories,
+      this.belongsToMany(models.category, {
+        through: "sighting_categories",
       });
     }
   }

@@ -8,15 +8,22 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      console.log(models.sighting_categories); // Should log the sighting_categories model
+
       // define association here
-      this.belongsToMany(models.Sighting, {
-        through: models.sighting_categories,
+      this.belongsToMany(models.sighting, {
+        through: "sighting_categories",
       });
     }
   }
   Category.init(
     {
-      id: DataTypes.INTEGER,
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
