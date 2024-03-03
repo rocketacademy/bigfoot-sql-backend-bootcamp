@@ -9,13 +9,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasOne(models.sighting);
+      this.belongsTo(models.sighting);
     }
   }
   comment.init(
     {
       content: DataTypes.STRING,
-      SightingId: {
+      sighting_id: {
         type: DataTypes.INTEGER,
         references: {
           // Sequelize docs suggest this should be plural table name and not singular model name
