@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.comment);
       this.belongsToMany(models.Sighting, {
         through: models.sighting_categories,
       });
@@ -17,9 +16,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   Category.init(
     {
-      date: DataTypes.DATE,
-      location: DataTypes.STRING,
-      notes: DataTypes.TEXT,
+      id: DataTypes.INTEGER,
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {
       sequelize,
