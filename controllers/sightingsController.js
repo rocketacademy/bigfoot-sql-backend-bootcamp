@@ -1,21 +1,15 @@
 const BaseController = require("./baseController");
 
 class SightingsController extends BaseController {
-  constructor(
-    model,
-    commentModel,
-    likeModel,
-    categoryModel,
-    sightingcategoryModel
-  ) {
-    super(model);
-    this.commentModel = commentModel;
-    this.likeModel = likeModel;
-    this.categoryModel = categoryModel;
-    this.sightingcategoryModel = sightingcategoryModel;
+  constructor(sighting, db) {
+    super(sighting);
+    this.comment = db.comment;
+    this.like = db.like;
+    this.category = db.category;
+    this.sightingcategory = db.sightingcategory;
+    this.sequelize = db.sequelize;
   }
 
-  // Retrieve specific sighting
   async getOne(req, res) {
     const { sightingId } = req.params;
     if (isNaN(Number(sightingId))) {
@@ -24,8 +18,8 @@ class SightingsController extends BaseController {
         .json({ error: true, msg: "Wrong Type of sightingID" });
     }
     try {
-      const sighting = await this.model.findByPk(sightingId, {
-        include: [this.categoryModel, this.likeModel, this.commentModel],
+      const sighting = await this.baseModel.findByPk(sightingId, {
+        include: [this.category, this.like, this.comment],
       });
       return res.json(sighting);
     } catch (err) {
@@ -33,34 +27,31 @@ class SightingsController extends BaseController {
     }
   }
 
-  async getAll(req, res) {
-    try {
-      const output = await this.model.findAll({ include: this.categoryModel });
-      return res.json(output);
-    } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
-    }
-  }
-
   async createSighting(req, res) {
     const { category, intensity, ...data } = req.body;
+    const t = await this.sequelize.transaction();
     try {
-      const newData = await this.model.create(data);
-      const categoryInTable = await this.categoryModel.findByPk(category);
+      const newData = await this.baseModel.create(data, { transaction: t });
+      const categoryInTable = await this.category.findByPk(category, {
+        transaction: t,
+      });
       await newData.setCategories(categoryInTable, {
         through: { intensity: intensity },
+        transaction: t,
       });
-      await this.sightingcategoryModel.update(
+      await this.sightingcategory.update(
         { intensity: intensity },
-        { where: { sightingId: newData.id } }
+        { where: { sightingId: newData.id }, transaction: t }
       );
+      await t.commit();
       return res.json(newData);
     } catch (err) {
+      await t.rollback();
       return res.status(400).json({ error: true, msg: err });
     }
   }
 
-  async editData(req, res) {
+  async updateData(req, res) {
     const { sightingId } = req.params;
     const data = req.body;
     if (isNaN(Number(sightingId))) {
@@ -69,7 +60,7 @@ class SightingsController extends BaseController {
         .json({ error: true, msg: "Wrong Type of sightingID" });
     }
     try {
-      const sighting = await this.model.update(data, {
+      const sighting = await this.baseModel.update(data, {
         where: { id: sightingId },
       });
       return res.json(sighting);
@@ -86,7 +77,7 @@ class SightingsController extends BaseController {
         .json({ error: true, msg: "Wrong Type of sightingID" });
     }
     try {
-      const comments = await this.commentModel.findAll({
+      const comments = await this.comment.findAll({
         where: {
           sighting_id: sightingId,
         },
@@ -106,14 +97,14 @@ class SightingsController extends BaseController {
     }
     const comment = { ...req.body, sightingId: sightingId };
     try {
-      const newComments = await this.commentModel.create(comment);
+      const newComments = await this.comment.create(comment);
       return res.json(newComments);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
   }
 
-  async editComment(req, res) {
+  async updateComment(req, res) {
     const { commentId } = req.params;
     if (isNaN(Number(commentId))) {
       return res
@@ -121,9 +112,8 @@ class SightingsController extends BaseController {
         .json({ error: true, msg: "Wrong Type of commentID" });
     }
     const comment = req.body;
-
     try {
-      const newComments = await this.commentModel.update(comment, {
+      const newComments = await this.comment.update(comment, {
         where: { id: commentId },
       });
       return res.json(newComments);
@@ -140,7 +130,7 @@ class SightingsController extends BaseController {
         .json({ error: true, msg: "Wrong Type of commentID" });
     }
     try {
-      await this.commentModel.destroy({
+      await this.comment.destroy({
         where: { id: commentId },
       });
       return res.send("Delete completed");
@@ -157,7 +147,7 @@ class SightingsController extends BaseController {
         .json({ error: true, msg: "Wrong Type of sightingID" });
     }
     try {
-      await this.likeModel.create({ sightingId: sightingId });
+      await this.like.create({ sightingId: sightingId });
       return res.send("Liked");
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -172,7 +162,7 @@ class SightingsController extends BaseController {
         .json({ error: true, msg: "Wrong Type of sightingID" });
     }
     try {
-      const likes = await this.likeModel.findAndCountAll({
+      const likes = await this.like.findAndCountAll({
         where: { sightingId: sightingId },
       });
       return res.json(likes);
