@@ -7,7 +7,7 @@ class CategoriesRouter {
   }
   routes() {
     // we will insert routes into here later on
-    router.get("/all", this.controller.getAll.bind(this.controller));
+    router.get("/", this.controller.getAll.bind(this.controller));
     router.post("/", this.controller.createCategory.bind(this.controller));
     return router;
   }

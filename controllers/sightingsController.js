@@ -6,7 +6,7 @@ class SightingsController extends BaseController {
     this.comment = db.comment;
     this.like = db.like;
     this.category = db.category;
-    this.sightingcategory = db.sightingcategory;
+    this.sightingCategory = db.sightingCategory;
     this.sequelize = db.sequelize;
   }
 
@@ -18,7 +18,7 @@ class SightingsController extends BaseController {
         .json({ error: true, msg: "Wrong Type of sightingID" });
     }
     try {
-      const sighting = await this.baseModel.findByPk(sightingId, {
+      const sighting = await this.base.findByPk(sightingId, {
         include: [this.category, this.like, this.comment],
       });
       return res.json(sighting);
@@ -31,18 +31,16 @@ class SightingsController extends BaseController {
     const { category, intensity, ...data } = req.body;
     const t = await this.sequelize.transaction();
     try {
-      const newData = await this.baseModel.create(data, { transaction: t });
-      const categoryInTable = await this.category.findByPk(category, {
-        transaction: t,
-      });
-      await newData.setCategories(categoryInTable, {
-        through: { intensity: intensity },
-        transaction: t,
-      });
-      await this.sightingcategory.update(
-        { intensity: intensity },
-        { where: { sightingId: newData.id }, transaction: t }
-      );
+      const newData = await this.base.create(data, { transaction: t });
+      if (category) {
+        const categoryInTable = await this.category.findByPk(category, {
+          transaction: t,
+        });
+        await newData.setCategories(categoryInTable, {
+          through: { intensity: intensity },
+          transaction: t,
+        });
+      }
       await t.commit();
       return res.json(newData);
     } catch (err) {
@@ -60,7 +58,7 @@ class SightingsController extends BaseController {
         .json({ error: true, msg: "Wrong Type of sightingID" });
     }
     try {
-      const sighting = await this.baseModel.update(data, {
+      const sighting = await this.base.update(data, {
         where: { id: sightingId },
       });
       return res.json(sighting);
