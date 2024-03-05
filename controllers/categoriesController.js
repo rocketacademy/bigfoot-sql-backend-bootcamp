@@ -6,8 +6,13 @@ class CategoriesController extends BaseController {
   }
 
   async getCategory(req, res) {
+    const whereCategoryName = req.body.whereCategoryName;
     try {
-      const categories = await this.model.findAll();
+      const categories = await this.model.findAll(
+        whereCategoryName
+          ? { where: { categoryName: whereCategoryName } }
+          : undefined
+      );
       return res.json(categories);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });

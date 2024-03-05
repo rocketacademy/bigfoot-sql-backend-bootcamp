@@ -10,7 +10,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      sightingId: {
+      sighting_id: {
         type: Sequelize.INTEGER,
         references: {
           model: {
@@ -19,7 +19,7 @@ module.exports = {
           key: "id",
         },
       },
-      categoryId: {
+      category_id: {
         type: Sequelize.INTEGER,
         references: {
           model: {

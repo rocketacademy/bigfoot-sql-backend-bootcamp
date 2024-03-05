@@ -5,11 +5,15 @@ class SightingsController extends BaseController {
     super(model);
   }
 
+  db = require("../db/models/index");
+
   // Retrieve specific sighting
   async getOne(req, res) {
     const { sightingId } = req.params;
     try {
-      const sighting = await this.model.findByPk(sightingId);
+      const sighting = await this.model.findByPk(sightingId, {
+        include: [{ model: this.db.category }],
+      });
       return res.json(sighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -17,11 +21,12 @@ class SightingsController extends BaseController {
   }
 
   async createSighting(req, res) {
-    const sighting = req.body;
-    console.log(sighting);
+    const sighting = req.body.input;
+    const categories = req.body.categories;
     try {
       const newSighting = await this.model.create(sighting);
-      return res.json(newSighting);
+      const newSightingCategories = newSighting.setCategories(categories);
+      return res.json(newSightingCategories);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
