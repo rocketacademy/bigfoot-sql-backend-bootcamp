@@ -7,15 +7,10 @@ class CategoriesController extends BaseController {
   }
 
   async createCategory(req, res) {
-    console.log(req);
-    console.log(req.body);
-    console.log(req.body.name);
     try {
-      console.log("Adding Category....");
       const newCategory = await this.categoryModel.create({
         name: req.body.name,
       });
-      console.log("Category Added....");
       return res.json(newCategory);
     } catch (err) {
       console.log(err);
@@ -24,7 +19,6 @@ class CategoriesController extends BaseController {
   }
 
   async getAllCategories(req, res) {
-    console.log(req);
     try {
       const categories = await this.categoryModel.findAll();
       return res.json(categories);
@@ -32,6 +26,18 @@ class CategoriesController extends BaseController {
       return res.status(400).json({ error: true, msg: err });
     }
   }
+
+  // async getSightingCategory(req, res) {
+  //   const { sightingId } = req.params;
+  //   console.log(req.params);
+  //   try {
+  //     const sighting = await this.model.findByPk(sightingId);
+  //     console.log(sighting);
+  //     return res.json(sighting);
+  //   } catch (err) {
+  //     return res.status(400).json({ error: true, msg: err });
+  //   }
+  // }
 }
 
 module.exports = CategoriesController;

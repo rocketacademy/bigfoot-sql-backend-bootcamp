@@ -12,7 +12,7 @@ class SightingsRouter {
     router.post("/", this.controller.insertOne.bind(this.controller));
     router.get(
       "/:sightingId/comments",
-      this.controller.getAllComments.bind(this.controller)
+      this.controller.getAllCommentsBySightingId.bind(this.controller)
     );
     router.post(
       "/:sightingId/comments",

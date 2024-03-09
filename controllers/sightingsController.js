@@ -1,26 +1,54 @@
 const BaseController = require("./baseController");
+// Removed the declaration and assignment of the categoryModel variable since it is not being used.
 
 class SightingsController extends BaseController {
-  constructor(model, commentModel) {
+  constructor(model, commentModel, categoryModel) {
     super(model);
     this.commentModel = commentModel;
+    this.categoryModel = categoryModel;
   }
 
-  //Create sighting
   async insertOne(req, res) {
-    const { date, location, notes } = req.body;
+    const { date, location, notes, selectedCategoryIds } = req.body;
     console.log(req.body);
+
     try {
       // Create new sighting
-      const newSighting = await this.model.create({
-        date: new Date(date),
-        location: location,
-        notes: notes,
-      });
-      // Respond with new sighting
+      let newSighting;
+      try {
+        newSighting = await this.model.create({
+          date,
+          location,
+          notes,
+        });
+      } catch (err) {
+        console.error("Error creating new sighting:", err);
+        throw err;
+      }
+
+      // Find category by name (assuming `selectedCategory` is the category name)
+      let selectedCategory;
+      try {
+        selectedCategory = await this.categoryModel.findOne({
+          where: {
+            id: selectedCategoryIds,
+          },
+        });
+      } catch (err) {
+        console.error("Error finding category:", err);
+        throw err;
+      }
+
+      console.log("Selected category:", selectedCategory);
+
+      // Assign category to the new sighting
+      await newSighting.setCategories([selectedCategory]);
+
+      console.log("Category assigned to sighting:", newSighting);
+
       return res.json(newSighting);
     } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
+      return res.status(400).json({ error: true, msg: err.message });
     }
   }
 
@@ -28,7 +56,9 @@ class SightingsController extends BaseController {
   async getOne(req, res) {
     const { sightingId } = req.params;
     try {
-      const sighting = await this.model.findByPk(sightingId);
+      const sighting = await this.model.findByPk(sightingId, {
+        include: "categories",
+      });
       return res.json(sighting);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -46,17 +76,20 @@ class SightingsController extends BaseController {
   }
 
   // Retrieve specific sighting
-  async getAllComments(req, res) {
-    const { sightingId: sighting_id } = req.params;
+  async getAllCommentsBySightingId(req, res) {
+    const { sightingId } = req.params;
     console.log(req.params);
     try {
       console.log("searching..");
       const comments = await this.commentModel.findAll({
-        sighting_id: sighting_id,
+        where: {
+          sighting_id: sightingId,
+        },
       });
       console.log(comments);
       return res.json(comments);
     } catch (err) {
+      console.log(err);
       return res.status(400).json({ error: true, msg: err });
     }
   }
@@ -77,6 +110,16 @@ class SightingsController extends BaseController {
       return res.json(newComment);
     } catch (err) {
       console.log(err);
+      return res.status(400).json({ error: true, msg: err });
+    }
+  }
+
+  async getSightingCategory(req, res) {
+    const { sightingId } = req.params;
+    try {
+      const sighting = await this.model.findByPk(sightingId);
+      return res.json(sighting);
+    } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
   }
